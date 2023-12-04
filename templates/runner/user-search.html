@@ -1,0 +1,21 @@
+{% extends "runner/layout.html" %}
+
+{% block body %}
+
+    <div id="top-container">
+        <div>
+            <form action="{% url 'user_search' %}" method="post">
+                {% csrf_token %}
+                <input type="text" placeholder="Search for users here..." name="user_search">
+                <button>Submit</button>
+            </form>
+        </div>
+
+        {% include "runner/profile-cards.html" with profiles=profiles %}
+        
+    </div>
+
+    {% load static %}
+    
+    
+{% endblock %}

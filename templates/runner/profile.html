@@ -1,0 +1,83 @@
+{% extends "runner/layout.html" %}
+
+{% block title %}{{ profile.username }}{% endblock %}
+
+{% block body %}
+
+    <div id="top-container">
+        <div class="padded">
+            <div id="profile">
+                <div id="profile-info">
+                    <div id="pic">
+                        <div id="profile-pic-container">
+                            {% if profile.profile_picture %}
+                                <img id="profile-pic" src="{{ MEDIA_URL }}{{ profile.profile_picture }}" alt="Profile Picture">
+                            {% else %}
+                                <img id="avatar" src="{{ MEDIA_URL }}/avatars/derp.svg" alt="avatar">
+                            {% endif %}
+                        </div>
+                        <div id="username-div">
+                            <h3 id="username">{{ profile.username }}</h3>
+                            {% if user.is_authenticated and user != profile %}
+                            <div id="follow-div">
+                                <button id="follow" class="border-flip">{% if is_following %}Unfollow{% else %}Follow{% endif %}</button>
+                            </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                    <div id="info">
+                        {% if profile.bio %}
+                            <div id="bio">
+                                <h6>{{ profile.bio }}</h6>
+                            </div>
+                        {% endif %}
+                        <div>
+                            {% if profile.phone_number %}
+                                <h6>Phone: {{ profile.phone_number }}</h6>
+                            {% endif %}
+                            <p>User since: {{ profile.date_joined.date }}</p>
+                        </div>
+                    </div>
+                    <div id="follow-counts">
+                        <h3>Followers: <span id="followers">{{ follower_count }}</span></h3>
+                        <h3>Following: <span id="following">{{ following_count }}</span></h3>
+                    </div>
+                </div>
+                <div id="edit-profile">
+                    {% if user == profile %}
+                        <a href="{% url 'edit_profile' %}">Edit profile</a>
+                    {% endif %}
+                </div>
+                <div id="celebrate">
+                    <a href="{% url 'celebrate' profile.username %}">Celebrate</a>
+                    {% if celebrate_error_message %}
+                        <h5 id="error-message">{{ celebrate_error_message }}</h5>
+                    {% endif %}
+                </div>
+            </div>
+            {% if user == profile %}
+                {% if user_follows %}
+                    <hr>
+                    <div id="user-follows-section">
+                        <h3>Users followed</h3>
+                        <div id="user-follows">
+                            {% include "runner/profile-cards.html" with profiles=user_follows %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            {% if events %}
+                <hr>
+                <h3>{% if user == profile %}Your{% else %}{{ profile.username }}'s{% endif %} Events </h3>
+                
+                {% include 'runner/event-cards.html' with events=events %}
+
+            {% endif %}
+        </div>
+    </div>
+
+    {% load static %}
+    <script src={% static 'profile.js' %}></script>
+    
+    
+{% endblock %}

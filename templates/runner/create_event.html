@@ -1,0 +1,70 @@
+{% extends "runner/layout.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+{% endblock %}
+
+{% block body %}
+
+    <div id="top-container">
+        <div class="padded">
+            <h3>Create a new running event</h3>
+            <form action="{% url 'create_event' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                    <tr>
+                        <th>Route upload method:</th>
+                        <td>
+                            <label>
+                                <input type="radio" name="uploadMethod" value="gpx">Upload gpx file
+                            </label>
+                            <br>
+                            <label>
+                                <input type="radio" name="uploadMethod" value="manual">Choose start end point manually
+                            </label>
+                        </td>
+                    </tr>
+                    <tr id="routeMapRow" style="display: none;">
+                        <th>Route Map:</th>
+                        <td><div id="routeMap"></div></td>
+                    </tr>
+                    <tr id="startMapRow" style="display: none;">
+                        <th>Start point:</th>
+                        <td>
+                            <div id="startMap"></div>
+                            <p id="startCoordinates">
+                                Latitude: <input type="number" step="0.00001" id="startLatitude" name="startLatitude">
+                                Longitude <input type="number" step="0.00001" id="startLongitude" name="startLongitude">
+                            </p>
+                        </td>
+                    </tr>
+                    <tr id="endMapRow" style="display: none;">
+                        <th>End point:</th>
+                        <td>
+                            <div id="endMap"></div>
+                            <p id="endCoordinates"">
+                                Latitude: <input type="number" step="0.00001" id="endLatitude" name="endLatitude">
+                                Longitude: <input type="number" step="0.00001" id="endLongitude" name="endLongitude">
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+            {% if error_message %}
+                <h5>{{ error_message }}</h5>
+            {% endif %}
+        </div>
+    </div>    
+
+        {% load static %}
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
+        <script type="module" src="{% static 'create_event.js' %}"></script>
+    
+{% endblock %}

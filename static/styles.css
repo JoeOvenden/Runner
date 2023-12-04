@@ -1,0 +1,315 @@
+.event, #profile #profile-info #info #bio, #routeMap, #startMap, #endMap, #map {
+  border: 2px solid white;
+}
+
+.event, #profile #profile-info #info #bio, .body, .padded {
+  padding: 2%;
+}
+
+#iconContainer, #profile-cards #profile-card #profile-pic-container, #profile #profile-info #pic #profile-pic-container {
+  aspect-ratio: 1/1;
+  overflow: hidden;
+}
+
+#iconContainer img, #profile #profile-info #pic #profile-pic-container img, #profile-cards #profile-card #profile-pic-container img {
+  width: 96%;
+  height: 96%;
+  object-fit: cover;
+  border-radius: 50%;
+  transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+}
+
+#profile-cards #profile-card #profile-pic-container img:hover {
+  width: 100%;
+  height: 100%;
+}
+
+* {
+  font-family: Open Sans, Verdana, Geneva, Tahoma, sans-serif;
+  color: white;
+}
+
+textarea, input {
+  background-color: rgb(233, 87, 147);
+  color: white;
+}
+
+textarea::placeholder, input::placeholder {
+  color: white;
+}
+
+#routeMap, #startMap, #endMap, #map {
+  height: 300px;
+  width: 600px;
+}
+
+body {
+  background-color: rgb(97, 12, 159);
+  height: 100%;
+  width: 100%;
+}
+
+select {
+  background: rgb(233, 87, 147);
+}
+
+.my-navbar {
+  background-color: rgb(233, 87, 147);
+  overflow: hidden;
+  margin: 0;
+  padding: 2px;
+}
+.my-navbar #left-side {
+  display: flex;
+  flex-direction: row;
+}
+.my-navbar #left-side img {
+  width: 100%;
+  height: 100%;
+}
+.my-navbar div {
+  padding: 2px;
+}
+
+.hidden {
+  display: none;
+}
+
+.my-navbar a {
+  float: left;
+  display: flex;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.my-navbar a:hover {
+  animation: font-color-light-to-grey 0.25s ease-in;
+  color: black;
+}
+
+@keyframes font-color-light-to-grey {
+  from {
+    color: white;
+  }
+  to {
+    color: black;
+  }
+}
+nav {
+  background-color: rgb(233, 87, 147);
+}
+
+.brand-name {
+  font-size: 20px;
+}
+
+#top-container {
+  background-color: rgb(218, 12, 129);
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: #c5c5c5;
+}
+
+button {
+  background-color: rgb(148, 11, 146);
+}
+
+hr {
+  border: 2px solid;
+  border-image: linear-gradient(to right, rgb(218, 12, 129), rgb(148, 11, 146), rgb(218, 12, 129));
+  border-image-slice: 1;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.border-flip {
+  display: inline-block;
+  padding: 15px;
+  width: 180px;
+  position: relative;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: none;
+  border: none;
+  color: white;
+}
+
+.border-flip::before {
+  content: "";
+  position: absolute;
+  inset: 0px;
+  transform: perspective(350px) rotateX(3600deg);
+  transition: all 2s ease 0.25s;
+  border: 3px solid rgb(148, 11, 146);
+}
+
+.border-flip:hover::before {
+  transition: all 10s ease 0s;
+  transform: perspective(350px) rotateX(-180deg);
+}
+
+.border-flip:focus {
+  outline: none;
+}
+
+.btn {
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+}
+
+.btn:hover .btn-slide-show-text1 {
+  margin-left: 65px;
+}
+
+#profile #top-section {
+  display: flex;
+}
+#profile #top-section #username-div {
+  position: relative;
+  left: 6%;
+}
+#profile #top-section #follow-counts {
+  max-width: 25%;
+  position: relative;
+  left: 40%;
+}
+#profile #profile-info {
+  display: flex;
+  margin-bottom: 2%;
+  height: 60vh;
+}
+#profile #profile-info div {
+  margin-left: 2%;
+  margin-right: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#profile #profile-info #pic #profile-pic-container {
+  width: 15vw;
+  height: 15vw;
+}
+#profile #profile-info #pic #username-div {
+  margin-top: 6%;
+}
+#profile #profile-info #info {
+  min-width: 50%;
+  max-width: 50%;
+  height: auto;
+}
+#profile #profile-info #info #bio {
+  margin-bottom: 2%;
+  width: 100%;
+  min-height: 70%;
+}
+
+#profile-cards {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+#profile-cards #profile-card {
+  width: 15%;
+  display: flex;
+  flex-direction: column;
+  margin: 2%;
+}
+#profile-cards #profile-card h3 {
+  align-self: center;
+}
+#people-followed {
+  margin-top: 4%;
+}
+
+.event {
+  display: flex;
+}
+.event p {
+  margin-bottom: 0.2rem;
+}
+
+#map-info {
+  margin-top: 4%;
+}
+#map-info p {
+  margin-bottom: 0.2rem;
+}
+
+.flex-row {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.marker-popup p {
+  margin-bottom: 0.2rem !important;
+  margin: 0 !important;
+}
+
+.leaflet-popup-content p {
+  color: black;
+}
+
+#key {
+  margin-top: 2%;
+}
+#key h5 {
+  display: flex;
+  align-items: center;
+}
+
+#iconContainer {
+  width: 32px;
+  height: 32px;
+}
+#icon-404 {
+  width: 20%;
+  height: 20%;
+}
+
+#app .range-slider {
+  width: 300px;
+  margin: auto;
+  text-align: center;
+  position: relative;
+  height: 6em;
+}
+#app .range-slider input[type=range] {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+#app input[type=number] {
+  border: 1px solid #ddd;
+  text-align: center;
+  font-size: 1.6em;
+  -moz-appearance: textfield;
+}
+#app input[type=number]::-webkit-outer-spin-button,
+#app input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+#app input[type=number]:invalid,
+#app input[type=number]:out-of-range {
+  border: 2px solid #ff6347;
+}
+#app input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+}
+
+/*# sourceMappingURL=styles.css.map */

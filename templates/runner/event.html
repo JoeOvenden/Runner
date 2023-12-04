@@ -1,0 +1,77 @@
+{% extends "runner/layout.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+{% endblock %}
+
+
+{% block body %}
+
+    <div id="top-container">
+        <div class="padded">
+            <h3>{{ event.title }}</h3>
+            <p id="event_id" class="hidden">{{ event.id }}</p>
+            <div class="row">
+                <div class="col-6">
+                    <p>Description: {{ event.description }}</p>
+                    <p>Date: {{ event.date }}</p>
+                    <p>Time: {{ event.time }}</p>
+                    <p>Organiser: <a href="{% url 'profile' event.organiser %}">{{ event.organiser }}</a></p>
+                </div>
+                <div class="col-6">
+                    <p>People going:
+                        <ul>
+                            {% for person in attending %}
+                                <li><a href="{% url 'profile' person %}">{{ person }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                    <button id="attend" class="border-flip">{% if is_going %}Unattend event{% else %}Attend event{% endif %}</button>
+                </div>
+            </div>
+
+
+            <hr>
+            <div>
+                <h5>Run details</h5>
+                <p>Distance: {{ event.formatted_distance }}</p>
+                <p>Duration: {{ event.formatted_duration }}
+                <p>Pace: {{ event.formatted_pace }}</p>    
+            </div>
+            <div id="map-info">
+                {% if event.route %}
+                    <p style="display: none;" id="gpxFileLoc">{{ MEDIA_URL }}{{ event.route }}</p>
+                    <p id="displayType" style="display: none;">route</p>
+                    <h5>Route:</h5>
+                {% else %}
+                    <p id="displayType" style="display: none;">startEnd</p>
+                    <h5>Start and end points:</h5>
+                {% endif %}
+                <div id="map"></div>
+                <p>Start Coordinates: <span id="startLatitude">{{ event.start_point_lat }}</span>, <span id="startLongitude">{{ event.start_point_lng }}</span></p>
+                <p>End Coordinates: <span id="endLatitude">{{ event.end_point_lat }}</span>, <span id="endLongitude">{{ event.end_point_lng }}</span></p>
+                <div id="key" class="flex-row">
+                    <div id="iconContainer">
+                        <img src="{{ MEDIA_URL }}icons/pin-icon-start.png">
+                    </div>
+                    <h5> = START </h5>
+                    &nbsp;
+                    <div id="iconContainer">
+                        <img src="{{ MEDIA_URL }}icons/pin-icon-end.png">
+                    </div>
+                    <h5> = FINISH </h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% load static %}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
+     <script type="module" src="{% static 'event.js' %}"></script>
+    
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "runner/layout.html" %}
+
+{% block body %}
+
+    <div id="top-container">
+
+        <div class="padded">
+            <h2>This page does not exist!</h2>
+            <img id="icon-404" src="{{ MEDIA_URL }}avatars/angry.png">
+        </div>
+
+        <script>
+            let images = ["angry.png", "shocked.png", "unsure.png"];
+            let icon = document.getElementById("icon-404");
+            
+            let index = 0;
+            
+            // Change image shown to the next one
+            function showNextImage() {
+                icon.src = "{{ MEDIA_URL }}avatars/" + images[index];
+                index = (index + 1) % images.length;
+                setTimeout(showNextImage, 500); // Toggle every half a second (500 milliseconds)
+            }
+            
+            // Start the image switching
+            showNextImage();
+        </script>
+
+    </div>
+    
+    
+{% endblock %}

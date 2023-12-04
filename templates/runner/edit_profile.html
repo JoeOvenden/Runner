@@ -1,0 +1,22 @@
+{% extends "runner/layout.html" %}
+
+{% block title %}Edit profile{% endblock %}
+
+{% block body %}
+
+    <div id="top-container">
+        <div class="padded">
+            <form action="{% url 'edit_profile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    {% load static %}
+    
+    
+{% endblock %}
