@@ -16,8 +16,8 @@
             <div class="row">
                 <div class="col-6">
                     <p>Description: {{ event.description }}</p>
-                    <p>Date: {{ event.date }}</p>
-                    <p>Time: {{ event.time }}</p>
+                    <p>Date: {{ event.date_time.date }}</p>
+                    <p>Time: {{ event.date_time.time }}</p>
                     <p>Organiser: <a href="{% url 'runner:profile' event.organiser %}">{{ event.organiser }}</a></p>
                 </div>
                 <div class="col-6">

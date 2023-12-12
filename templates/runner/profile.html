@@ -66,8 +66,51 @@
                     </div>
                 {% endif %}
             {% endif %}
-            {% if events_organised or events_attending %}
-                <hr>
+
+
+            <!-- User events -->
+
+            <p>Filter events:</p>
+            <form method="{% url 'runner:profile' profile %}" method="post"}>
+                {% csrf_token %}
+                <div class="flex-row">
+                    <select name="event-filter-when">
+                        <option value="upcoming" selected>Upcoming</option>
+                        <option value="past">Past</option>
+                    </select>
+                    <select name="event-filter-status">
+                        <option value="attending" selected>Attending</option>
+                        <option value="organised">Organised</option>
+                    </select>
+                    <input type="submit">
+                </div>
+            </form>
+            <hr>
+            <div id="upcoming-events">
+                <h3>{% if user == profile %}Your{% else %}{{ profile }}'s{% endif %} upcoming events</h3>
+                {% if upcoming_events %}
+                    {% include 'runner/event-cards.html' with events=upcoming_events %}
+                {% endif %}
+            </div>
+            <div id="past-events" class="hidden">
+                <h3>{% if user == profile %}Your{% else %}{{ profile }}'s{% endif %} past events</h3>
+                {% if past_events %}
+                    {% include 'runner/event-cards.html' with events=past_events %}
+                {% endif %}
+            </div>
+            <div id="upcoming-organised-events" class="hidden">
+                <h3>Upcoming events organised by {% if user == profile %}you{% else %}{{ profile }}{% endif %}</h3>
+                {% if upcoming_organised_events %}
+                    {% include 'runner/event-cards.html' with events=upcoming_organised_events %}
+                {% endif %}
+            </div>
+            <div id="past-organised-events" class="hidden">
+                <h3>Past events organised by {% if user == profile %}you{% else %}{{ profile }}{% endif %}</h3>
+                {% if past_organised_events %}
+                    {% include 'runner/event-cards.html' with events=past_organised_events %}
+                {% endif %}
+            </div>
+                <!-- <hr>
                 <div class="row">
                     {% if events_organised %}
                         <div class="col-6">
@@ -81,8 +124,7 @@
                             {% include 'runner/event-cards.html' with events=events_attending %}
                         </div>
                     {% endif %}
-                </div>
-            {% endif %}
+                </div> -->
         </div>
     </div>
 

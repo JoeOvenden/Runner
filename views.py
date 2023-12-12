@@ -18,7 +18,7 @@ from .models import *
 from .forms import *
 
 
-def get_events_attended(user, key=lambda event: event.date, reverse=False):
+def get_events_attended(user, reverse=False):
     event_attendence_objects = user.events_attending.all()
     events_attending = event_attendence_objects.values("event")
     events_attending = Event.objects.filter(pk__in=events_attending).order_by('date_time')
@@ -88,6 +88,9 @@ def register(request):
 
 
 def profile(request, username):
+    print("----")
+    print(request.method)
+    print("----")
     try:
         user = User.objects.get(username=username)
     
@@ -103,15 +106,25 @@ def profile(request, username):
     follow_objects = user.followings.all()  # Follow objects where user is the follower
     user_follows = [follow_object.user_followed for follow_object in follow_objects]
     
-    # Get all the users events
-    events_organised = sorted(user.events_organised.all(), key=lambda event: event.date)
+    # Get all the users events that they are either attending or have organised
+    events_attending = get_events_attended(user)
+    events_organised = user.events_organised.all()
+
+    # Split the events into past and upcoming
+    upcoming_events = Event.objects.filter(pk__in=events_attending).filter(date_time__gte=datetime.datetime.now())
+    past_events = Event.objects.filter(pk__in=events_attending).filter(date_time__lt=datetime.datetime.now())
+    upcoming_organised_events = Event.objects.filter(pk__in=events_organised).filter(date_time__gte=datetime.datetime.now())
+    past_organised_events = Event.objects.filter(pk__in=events_organised).filter(date_time__lt=datetime.datetime.now())
 
     data = {
         "profile": user,
         "follower_count": user.follower_count,
         "following_count": user.following_count,
         "is_following": is_following,
-        "events_organised": events_organised
+        "upcoming_events": upcoming_events,
+        "past_events": past_events,
+        "upcoming_organised_events": upcoming_organised_events,
+        "past_organised_events": past_organised_events,
     }
     # data.update(paginate(user_follows, 6, "user_follows"))
     data.update({
@@ -119,7 +132,7 @@ def profile(request, username):
     })
     if request.user.username == username:
         data.update({
-            "events_attending": get_events_attended(user, key=lambda event: event.date)
+            "events_attending": get_events_attended(user)
         })
 
     return render(request, "runner/profile.html", data)
@@ -267,7 +280,7 @@ def celebrate(request, username):
     """
     # Get the user's previous events attended
     # Add up the stats!
-    events_attended = get_events_attended(request.user).filter(Q(lambda event: get_event_datetime(event) <= datetime.now()))
+    events_attended = get_events_attended(request.user).filter(Q(lambda event: event.date_time <= datetime.datetime.now()))
     print(events_attended)
     return render(request, "runner/celebrate.html")
 
@@ -305,11 +318,9 @@ def create_event(request):
                 "form": form
         })
     
-        event.date = form.cleaned_data["date"]
-        event.time = form.cleaned_data["time"]
-        event.set_date_time()
         event.description = form.cleaned_data["description"]
         event.organiser = request.user
+        event.date_time = form.cleaned_data["date_time"]
 
         # If user has uploaded a gpx file
         if request.POST["uploadMethod"] == "gpx":
@@ -319,6 +330,8 @@ def create_event(request):
         event.start_point_lng = Decimal(request.POST["startLongitude"]).quantize(Decimal('0.00000'))
         event.end_point_lat = Decimal(request.POST["endLatitude"]).quantize(Decimal('0.00000'))
         event.end_point_lng = Decimal(request.POST["endLongitude"]).quantize(Decimal('0.00000'))
+
+        
 
         event.save()
 
@@ -369,13 +382,13 @@ def get_events(start_date=None, end_date=None, min_distance=None, max_distance=N
 
     Events are returned as a list sorted in chronological order
     """
-    events = Event.objects.filter(date__gte=datetime.date.today())
+    events = Event.objects.filter(date_time__gte=datetime.date.today())
 
     if start_date is not None:
-        events = events.filter(date__gte=start_date)
+        events = events.filter(date_time__gte=start_date)
 
     if end_date is not None:
-        events = events.filter(date__lte=end_date)
+        events = events.filter(date_time__lte=end_date)
 
     if min_distance is not None:
         events = events.filter(distance__gte=min_distance)
@@ -386,7 +399,7 @@ def get_events(start_date=None, end_date=None, min_distance=None, max_distance=N
     if title_filter is not None:
         events = events.filter(title__icontains=title_filter)
 
-    events = sorted(events, key=lambda e : e.date)
+    events = sorted(events, key=lambda event : event.date_time)
     return events
 
 

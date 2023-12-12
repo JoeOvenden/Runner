@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
 import datetime
 
 
@@ -27,9 +28,7 @@ class Follow(models.Model):
 class Event(models.Model):
     organiser = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="events_organised", null=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    date = models.DateField(default=datetime.date.today)
-    time = models.TimeField(default=datetime.datetime.now().time())
-    date_time = models.DateTimeField()
+    date_time = models.DateTimeField(default=timezone.now)
     duration = models.TimeField()
     distance = models.DecimalField(max_digits=7, decimal_places=1)
     pace = models.TimeField(default=datetime.time(0, 6))
@@ -70,8 +69,8 @@ class Event(models.Model):
             formatted_distance += "s"
         return formatted_distance
     
-    def set_date_time(self):
-        self.date_time = datetime.datetime.combine(self.date, self.time)
+    # def set_date_time(self):
+    #     self.date_time = datetime.datetime.combine(self.date, self.time)
     
 
 class Event_Attendence(models.Model):
