@@ -333,13 +333,6 @@ def event_page(request, event_id):
     })
 
 
-def get_profile_card(request):
-    # Returns profile card of current user
-    return render(request, "runner/profile-card.html", {
-        "profile": request.user
-    })
-
-
 def page_not_found(request):
     return render(request, "runner/404.html")
 

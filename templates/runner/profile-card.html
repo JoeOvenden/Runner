@@ -1,4 +1,4 @@
-<div id="{{ profile.username }}" class="profile-card">
+<div id="{{ profile.username }}" class="profile-card {% if hidden %}hidden{% endif %}">
     <h3 id="username"><a href="{% url 'runner:profile' profile.username %}">{{ profile.username }}</a></h3>
     <div id="profile-pic-container">
         <a href="{% url 'runner:profile' profile.username %}">

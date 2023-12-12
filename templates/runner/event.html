@@ -23,8 +23,15 @@
                 <div class="col-6">
                     <p id="show-people-going" class="collapsible">People going: <span id="attendence_count">{{ number_of_attending }}</span></p>
                     <div id="people-going" class="content">
-                        {% include "runner/profile-cards.html" with profiles=attending %}                        
+                        {% include "runner/profile-cards.html" with profiles=attending %}       
+
+                        <!-- When the user clicks attend or unattend their profile card's style gets changed
+                              to be hidden or shown. Hence the profile card is always loaded -->
+                        {% if user not in attending %} 
+                            {% include "runner/profile-card.html" with profile=user hidden=True %}
+                        {% endif %}
                     </div>
+
                     <button id="attend" class="border-flip">{% if is_going %}Unattend event{% else %}Attend event{% endif %}</button>
                 </div>
             </div>

@@ -20,5 +20,4 @@ urlpatterns = [
     path("event/<int:event_id>", views.event_page, name="event"),
     path("404", views.page_not_found, name="404"),
     path("events_search", views.events_search, name="events_search"),
-    path("profile-card", views.get_profile_card, name="profile-card"),
 ]

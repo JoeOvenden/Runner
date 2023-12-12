@@ -53,17 +53,6 @@ function initMap() {
     }
 }
 
-function getUserProfileCard() {
-    fetch("/runner/profile-card", {
-        method: 'GET'
-    }).then(response => response.text())
-      .then(data => {
-        console.log(data);
-        return data;
-      })
-      .catch(error => console.error("Error: ", error))
-}
-
 function addAttendEventListener() {
     let attend_text = document.querySelector("#attend");
     if (attend_text == undefined) {
@@ -89,25 +78,24 @@ function addAttendEventListener() {
             let attendence_count = document.querySelector("#attendence_count");
             attendence_count.innerHTML = parseInt(attendence_count.innerHTML) + change;
 
-            // Get the users username from the navbar
+            // Get the users username from the navbar and their profile card from that
             let username = document.querySelector("#logged-in-user").innerHTML;
-            
-            // If the user has just attended
+            let profileCard = document.querySelector(`#${username}`);
+            console.log("Profile card: ", profileCard);
+            console.log("Username:", username);
+
+            // If the user has just attended then change the button text accordingly
+            // and make visible the user's profile card in people going
             if (change == 1) {
                 attend_text.innerHTML = "Unattend event";
-                let profileCards = document.querySelector("#profile-cards");
-                let profileCard = getUserProfileCard();
-                console.log(profileCard);
-                profileCards.innerHTML += profileCard;
+                profileCard.classList.remove("hidden");
             }
-            // If the user has just unattended
-            else {
-                // Change button text
-                attend_text.innerHTML = "Attend event";
 
-                // Get user card display in people going and remove it
-                let user_card = document.querySelector(`#${username}`);
-                user_card.remove();
+            // If the user has just unattended then change the button text accordingly
+            // and hide the user's profile card in people going
+            else {
+                attend_text.innerHTML = "Attend event";
+                profileCard.classList.add("hidden");
             }
             })
             .catch(error => console.error("Error: ", error));

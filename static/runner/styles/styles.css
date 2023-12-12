@@ -82,7 +82,7 @@ select {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .my-navbar a {
