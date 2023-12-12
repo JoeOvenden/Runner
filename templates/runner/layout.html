@@ -5,7 +5,7 @@
     <head>
         <title>{% block title %}Runner{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <link href="{% static 'styles.css' %}" rel="stylesheet">
+        <link href="{% static 'runner/styles/styles.css' %}" rel="stylesheet">
         <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}icons/logo.png">
         {% block head %}{% endblock %}
     </head>
@@ -16,19 +16,19 @@
                     <img class="logo" src="{{ MEDIA_URL }}icons/logo.png">
                 </div>
                 <div>
-                    <a class="brand-name" href={% url 'index' %}>Runner</a>
+                    <a class="brand-name" href={% url 'runner:index' %}>Runner</a>
                 </div>
             </div>
             <div class="links col-9">
                 {% if user.is_authenticated %}
-                    <strong><a href="{% url 'profile' user.username %}">{{ user.username }}</a></strong>
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>   
-                    <a class="nav-link" href="{% url 'create_event' %}">Create event</a>
-                    <a class="nav-link" href="{% url 'user_search' %}">Search for users</a>
-                    <a class="nav-link" href="{% url 'events_search' %}">Events</a>
+                    <strong><a id="logged-in-user" href="{% url 'runner:profile' user.username %}">{{ user.username }}</a></strong>
+                    <a class="nav-link" href="{% url 'runner:logout' %}">Log Out</a>   
+                    <a class="nav-link" href="{% url 'runner:create_event' %}">Create event</a>
+                    <a class="nav-link" href="{% url 'runner:user_search' %}">Search for users</a>
+                    <a class="nav-link" href="{% url 'runner:events_search' %}">Events</a>
                 {% else %}
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    <a class="nav-link" href="{% url 'runner:login' %}">Log In</a>
+                    <a class="nav-link" href="{% url 'runner:register' %}">Register</a>
                 {% endif %}
             </div>
         </div>

@@ -53,6 +53,17 @@ function initMap() {
     }
 }
 
+function getUserProfileCard() {
+    fetch("/runner/profile-card", {
+        method: 'GET'
+    }).then(response => response.text())
+      .then(data => {
+        console.log(data);
+        return data;
+      })
+      .catch(error => console.error("Error: ", error))
+}
+
 function addAttendEventListener() {
     let attend_text = document.querySelector("#attend");
     if (attend_text == undefined) {
@@ -61,33 +72,67 @@ function addAttendEventListener() {
     attend_text.addEventListener("click", () => {
         let event_id = document.querySelector("#event_id").innerHTML;
         // Send a request to toggle following
-        fetch("/attend", {
+        fetch("/runner/attend", {
             method: 'PUT',
             body: JSON.stringify({
                 event_id: event_id
             })
         }).then(response => response.json())
             .then(data => {
+
+            // Get the change in attendence count
+            // change = 1 means the user has attended the event
+            // change = -1 means the user has unattended the event
             let change = parseInt(data['change']);
 
-            // Update the attendence count displayed
-            // let attendence = document.querySelector("#attendence");
-            // attendence.innerHTML = parseInt(attendence.innerHTML) + change;
+            // Alter displayed attendence count
+            let attendence_count = document.querySelector("#attendence_count");
+            attendence_count.innerHTML = parseInt(attendence_count.innerHTML) + change;
 
+            // Get the users username from the navbar
+            let username = document.querySelector("#logged-in-user").innerHTML;
+            
             // If the user has just attended
             if (change == 1) {
                 attend_text.innerHTML = "Unattend event";
+                let profileCards = document.querySelector("#profile-cards");
+                let profileCard = getUserProfileCard();
+                console.log(profileCard);
+                profileCards.innerHTML += profileCard;
             }
             // If the user has just unattended
             else {
+                // Change button text
                 attend_text.innerHTML = "Attend event";
+
+                // Get user card display in people going and remove it
+                let user_card = document.querySelector(`#${username}`);
+                user_card.remove();
             }
             })
             .catch(error => console.error("Error: ", error));
     })
 }
 
+function addCollapsibleEventListeners() {
+    let coll = document.getElementsByClassName("collapsible");
+    let i;
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var content = this.nextElementSibling;
+          if (content.style.maxHeight){
+            content.style.maxHeight = null;
+          } 
+          else {
+            content.style.maxHeight = "50vh";
+          }
+        });
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     initMap();
     addAttendEventListener();
+    addCollapsibleEventListeners();
 });

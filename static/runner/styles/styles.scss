@@ -16,6 +16,16 @@ $font-color-grey: #c5c5c5;
     padding: 2%;
 }
 
+%link {
+    color: white;
+}
+
+%link:hover {
+    color: $font-color-grey;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 %square-image-container {
         aspect-ratio: 1/1;
         overflow: hidden;
@@ -138,11 +148,11 @@ nav {
 }
 
 a {
-    color: white;
+    @extend %link;
 }
 
-a:hover {
-    color: $font-color-grey;
+.link {
+    @extend %link;
 }
 
 button {
@@ -270,23 +280,24 @@ form {
     display: flex;
     flex-wrap: wrap;
     max-width: 100%;
+}
 
-    #profile-card {
-        width: 15%;
-        display: flex;
-        flex-direction: column;
-        margin: 2%;
-        
-        h3 {
-            align-self: center;
-        }
-
-        #profile-pic-container {
-            @extend %square-image-container;
+.profile-card {
+    min-width: 150px;
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    margin: 2%;
     
-            img {
-                @extend %square-image-with-hover;
-            }
+    h3 {
+        align-self: center;
+    }
+
+    #profile-pic-container {
+        @extend %square-image-container;
+
+        img {
+            @extend %square-image-with-hover;
         }
     }
 }
@@ -396,3 +407,30 @@ form {
         width: 100%;
       }
 }
+
+#show-people-going {
+    @extend %link;
+}
+
+#people-going {
+    height: 50vh;
+    width: 100%;
+    overflow: auto;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+    background-color: $theme-color1;
+    cursor: pointer;
+    padding: 3%;
+    width: 100%;
+  }
+
+  /* Style the collapsible content. Note: hidden by default */
+  .content {
+    background-color: $theme-color1;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+  }
+

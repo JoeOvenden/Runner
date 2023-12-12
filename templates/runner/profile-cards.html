@@ -1,16 +1,5 @@
 <div id="profile-cards">
     {% for profile in profiles %}
-        <div id="profile-card">
-            <h3 id="username"><a href="{% url 'profile' profile.username %}">{{ profile.username }}</a></h3>
-            <div id="profile-pic-container">
-                <a href="{% url 'profile' profile.username %}">
-                    {% if profile.profile_picture %}
-                        <img id="profile-pic" src="{{ MEDIA_URL }}{{ profile.profile_picture }}" alt="Profile Picture">
-                    {% else %}
-                        <img id="avatar" src="{{ MEDIA_URL }}/avatars/derp.svg" alt="avatar">
-                    {% endif %}
-                </a>
-            </div>
-        </div>
+        {% include "runner/profile-card.html" with profile=profile %}
     {% endfor %}
 </div>

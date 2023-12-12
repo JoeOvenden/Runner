@@ -6,7 +6,7 @@
 
     <div id="top-container">
         <div class="padded">
-            <form action="{% url 'edit_profile' %}" method="post" enctype="multipart/form-data">
+            <form action="{% url 'runner:edit_profile' %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <table>
                     {{ form.as_table }}
@@ -15,8 +15,5 @@
             </form>
         </div>
     </div>
-
-    {% load static %}
-    
     
 {% endblock %}

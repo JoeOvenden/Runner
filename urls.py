@@ -3,6 +3,8 @@ from django.urls import path
 
 from . import views
 
+app_name = "runner"
+
 urlpatterns = [
     path("", views.index, name="index"),
     path("login", views.login_view, name="login"),
@@ -17,5 +19,6 @@ urlpatterns = [
     path("create_event", views.create_event, name="create_event"),
     path("event/<int:event_id>", views.event_page, name="event"),
     path("404", views.page_not_found, name="404"),
-    path("events_search", views.events_search, name="events_search")
+    path("events_search", views.events_search, name="events_search"),
+    path("profile-card", views.get_profile_card, name="profile-card"),
 ]

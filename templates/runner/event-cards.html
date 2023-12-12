@@ -2,10 +2,11 @@
     {% for event in events %}
         <div id="{{ event.id }}" class="event">
             <div id="left-side">
-                <h5><a href="{% url 'event' event.id %}"><span id="title">{{ event.title }}</span></a></h5>
+                <h5><a href="{% url 'runner:event' event.id %}"><span id="title">{{ event.title }}</span></a></h5>
                 <p>Distance: <span id="distance">{{ event.formatted_distance }}</span></p>
                 <p>Duration: <span id="distance">{{ event.formatted_duration }}</span></p>
                 <p>Scheduled for: <span id="time">{{ event.time }}</span> <span id="date">{{ event.date }}</span> </p>
+                <p>Organised by <a id="organiser" href="{% url 'runner:profile' event.organiser %}">{{ event.organiser }}</a></p>
                 <p id="event-latlng-{{ event.id }}" class="hidden">{{ event.start_point_lat }},{{ event.start_point_lng }}</p>
             </div>
             <div id="right-side">

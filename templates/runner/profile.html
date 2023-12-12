@@ -45,11 +45,11 @@
                 </div>
                 <div id="edit-profile">
                     {% if user == profile %}
-                        <a href="{% url 'edit_profile' %}">Edit profile</a>
+                        <a href="{% url 'runner:edit_profile' %}">Edit profile</a>
                     {% endif %}
                 </div>
                 <div id="celebrate">
-                    <a href="{% url 'celebrate' profile.username %}">Celebrate</a>
+                    <a href="{% url 'runner:celebrate' profile.username %}">Celebrate</a>
                     {% if celebrate_error_message %}
                         <h5 id="error-message">{{ celebrate_error_message }}</h5>
                     {% endif %}
@@ -66,18 +66,28 @@
                     </div>
                 {% endif %}
             {% endif %}
-            {% if events %}
+            {% if events_organised or events_attending %}
                 <hr>
-                <h3>{% if user == profile %}Your{% else %}{{ profile.username }}'s{% endif %} Events </h3>
-                
-                {% include 'runner/event-cards.html' with events=events %}
-
+                <div class="row">
+                    {% if events_organised %}
+                        <div class="col-6">
+                            <h3>Events organised by {% if user == profile %}You{% else %}{{ profile.username }}{% endif %}</h3>
+                            {% include 'runner/event-cards.html' with events=events_organised %}
+                        </div>
+                    {% endif %}
+                    {% if events_attending %}
+                        <div class="col-6">
+                            <h3>Events you are attending</h3>
+                            {% include 'runner/event-cards.html' with events=events_attending %}
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
         </div>
     </div>
 
     {% load static %}
-    <script src={% static 'profile.js' %}></script>
+    <script src={% static 'runner/scripts/profile.js' %}></script>
     
     
 {% endblock %}

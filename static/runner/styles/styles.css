@@ -6,12 +6,22 @@
   padding: 2%;
 }
 
-#iconContainer, #profile-cards #profile-card #profile-pic-container, #profile #profile-info #pic #profile-pic-container {
+#show-people-going, .link, a {
+  color: white;
+}
+
+#show-people-going:hover, .link:hover, a:hover {
+  color: #c5c5c5;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#iconContainer, .profile-card #profile-pic-container, #profile #profile-info #pic #profile-pic-container {
   aspect-ratio: 1/1;
   overflow: hidden;
 }
 
-#iconContainer img, #profile #profile-info #pic #profile-pic-container img, #profile-cards #profile-card #profile-pic-container img {
+#iconContainer img, #profile #profile-info #pic #profile-pic-container img, .profile-card #profile-pic-container img {
   width: 96%;
   height: 96%;
   object-fit: cover;
@@ -19,7 +29,7 @@
   transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
 }
 
-#profile-cards #profile-card #profile-pic-container img:hover {
+.profile-card #profile-pic-container img:hover {
   width: 100%;
   height: 100%;
 }
@@ -107,14 +117,6 @@ nav {
 
 #top-container {
   background-color: rgb(218, 12, 129);
-}
-
-a {
-  color: white;
-}
-
-a:hover {
-  color: #c5c5c5;
 }
 
 button {
@@ -219,13 +221,15 @@ form {
   flex-wrap: wrap;
   max-width: 100%;
 }
-#profile-cards #profile-card {
+
+.profile-card {
+  min-width: 150px;
   width: 15%;
   display: flex;
   flex-direction: column;
   margin: 2%;
 }
-#profile-cards #profile-card h3 {
+.profile-card h3 {
   align-self: center;
 }
 #people-followed {
@@ -310,6 +314,28 @@ form {
 #app input[type=range] {
   -webkit-appearance: none;
   width: 100%;
+}
+
+#people-going {
+  height: 50vh;
+  width: 100%;
+  overflow: auto;
+}
+
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  background-color: rgb(233, 87, 147);
+  cursor: pointer;
+  padding: 3%;
+  width: 100%;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  background-color: rgb(233, 87, 147);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out;
 }
 
 /*# sourceMappingURL=styles.css.map */

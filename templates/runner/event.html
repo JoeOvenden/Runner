@@ -18,16 +18,13 @@
                     <p>Description: {{ event.description }}</p>
                     <p>Date: {{ event.date }}</p>
                     <p>Time: {{ event.time }}</p>
-                    <p>Organiser: <a href="{% url 'profile' event.organiser %}">{{ event.organiser }}</a></p>
+                    <p>Organiser: <a href="{% url 'runner:profile' event.organiser %}">{{ event.organiser }}</a></p>
                 </div>
                 <div class="col-6">
-                    <p>People going:
-                        <ul>
-                            {% for person in attending %}
-                                <li><a href="{% url 'profile' person %}">{{ person }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </p>
+                    <p id="show-people-going" class="collapsible">People going: <span id="attendence_count">{{ number_of_attending }}</span></p>
+                    <div id="people-going" class="content">
+                        {% include "runner/profile-cards.html" with profiles=attending %}                        
+                    </div>
                     <button id="attend" class="border-flip">{% if is_going %}Unattend event{% else %}Attend event{% endif %}</button>
                 </div>
             </div>
@@ -72,6 +69,6 @@
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
-     <script type="module" src="{% static 'event.js' %}"></script>
+     <script type="module" src="{% static 'runner/scripts/event.js' %}"></script>
     
 {% endblock %}

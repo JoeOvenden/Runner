@@ -29,7 +29,7 @@ def login_view(request):
         # Check if authentication successful
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("runner:index"))
         else:
             return render(request, "runner/login.html", {
                 "message": "Invalid username and/or password."
@@ -40,7 +40,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse("index"))
+    return HttpResponseRedirect(reverse("runner:index"))
 
 
 def register(request):
@@ -65,7 +65,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("runner:index"))
     else:
         return render(request, "runner/register.html")
 
@@ -87,30 +87,31 @@ def profile(request, username):
     user_follows = [follow_object.user_followed for follow_object in follow_objects]
     
     # Get all the users events
-    events = user.events_organised.all()
+    events_organised = sorted(user.events_organised.all(), key=lambda event: event.date)
 
     data = {
         "profile": user,
         "follower_count": user.follower_count,
         "following_count": user.following_count,
         "is_following": is_following,
-        "events": events
+        "events_organised": events_organised
     }
-    data.update(paginate(user_follows, 6, "user_follows"))
+    # data.update(paginate(user_follows, 6, "user_follows"))
+    data.update({
+        "user_follows": user_follows
+    })
+    if request.user.username == username:
+        event_attendences = user.events_attending.all()
+        events_attending = [attendence.event for attendence in event_attendences]
+        events_attending = sorted(events_attending, key=lambda event: event.date)
+        data.update({
+            "events_attending": events_attending
+        })
 
     return render(request, "runner/profile.html", data)
 
 
 def paginate(items, count_per_page, items_label):
-    """
-    Takes set of posts and returns a dictionary with 2 entries
-    
-    posts_user_ratings_dict is a dictionary of posts together with how the user has rated each post
-    page_obj is a paginator page object that has information about whether or not there is a next or previous page
-
-    Data for at most n posts is returned (by default 10), and which posts are based on the get parameter 'page'
-    which determines which page is being looked at
-    """
 
 
     # Sort posts in reverse chronological order and then make a paginator with n posts per page
@@ -155,6 +156,7 @@ def edit_profile(request):
 @csrf_exempt
 @login_required
 def follow(request):
+    print("TEST")
     if request.method == "PUT":
         data = json.loads(request.body)
         profile = data.get("profile_username")
@@ -225,12 +227,12 @@ def attend(request):
         return JsonResponse({'change': change})
 
 
-@login_required(login_url='/login')
-def following_page(request):
-    followings = request.user.followings.all()                                  # Get all the following objects of the user
-    users_followed = [following.user_followed for following in followings]      # Get all the user objects of the users followed
-    posts = Post.objects.filter(user__in=users_followed)                        # Get all the posts from the users followed
-    return render(request, "network/following.html", get_posts_data(request, posts))
+# @login_required(login_url='/login')
+# def following_page(request):
+#     followings = request.user.followings.all()                                  # Get all the following objects of the user
+#     users_followed = [following.user_followed for following in followings]      # Get all the user objects of the users followed
+#     posts = Post.objects.filter(user__in=users_followed)                        # Get all the posts from the users followed
+#     return render(request, "network/following.html", get_posts_data(request, posts))
 
 
 def get_rating_value(post, user):
@@ -276,7 +278,7 @@ def create_event(request):
         # Make a new event object, and then load the form information into a profile form
         # with the event linked to it
         event = Event()
-        form = EventForm(request.POST, request.FILES, instance=event)
+        form = EventForm(request.POST, instance=event)
 
         # Check if the form is invalid and if so return the form with an error message
         if not form.is_valid():
@@ -321,14 +323,21 @@ def event_page(request, event_id):
         event = Event.objects.get(id = event_id)
     except Event.DoesNotExist:
         return redirect('404')
-    
-    users_attending = [attending.user.username for attending in event.attendence.all()]
+    users_attending = [attending.user for attending in event.attendence.all()]
+    number_of_attending = len(users_attending)
     return render(request, "runner/event.html", {
         "event": event,
+        "number_of_attending": number_of_attending,
         "attending": users_attending,
-        "is_going": request.user.username in users_attending
+        "is_going": request.user in users_attending
     })
 
+
+def get_profile_card(request):
+    # Returns profile card of current user
+    return render(request, "runner/profile-card.html", {
+        "profile": request.user
+    })
 
 
 def page_not_found(request):
