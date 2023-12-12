@@ -29,6 +29,7 @@ class Event(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date = models.DateField(default=datetime.date.today)
     time = models.TimeField(default=datetime.datetime.now().time())
+    date_time = models.DateTimeField()
     duration = models.TimeField()
     distance = models.DecimalField(max_digits=7, decimal_places=1)
     pace = models.TimeField(default=datetime.time(0, 6))
@@ -68,6 +69,9 @@ class Event(models.Model):
         if self.distance != 1:
             formatted_distance += "s"
         return formatted_distance
+    
+    def set_date_time(self):
+        self.date_time = datetime.datetime.combine(self.date, self.time)
     
 
 class Event_Attendence(models.Model):

@@ -9,13 +9,30 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from decimal import Decimal
 from geopy.distance import geodesic
+from django.db.models import Q
+
 import datetime
+
 
 from .models import *
 from .forms import *
 
+
+def get_events_attended(user, key=lambda event: event.date, reverse=False):
+    event_attendence_objects = user.events_attending.all()
+    events_attending = event_attendence_objects.values("event")
+    events_attending = Event.objects.filter(pk__in=events_attending).order_by('date_time')
+    return events_attending
+
+
+def get_event_datetime(event):
+    event_datetime = datetime.datetime.combine(event.date, event.time)
+    return event_datetime
+
+
 def index(request):
     return render(request, "runner/index.html")
+
 
 @csrf_exempt
 def login_view(request):
@@ -101,11 +118,8 @@ def profile(request, username):
         "user_follows": user_follows
     })
     if request.user.username == username:
-        event_attendences = user.events_attending.all()
-        events_attending = [attendence.event for attendence in event_attendences]
-        events_attending = sorted(events_attending, key=lambda event: event.date)
         data.update({
-            "events_attending": events_attending
+            "events_attending": get_events_attended(user, key=lambda event: event.date)
         })
 
     return render(request, "runner/profile.html", data)
@@ -156,7 +170,6 @@ def edit_profile(request):
 @csrf_exempt
 @login_required
 def follow(request):
-    print("TEST")
     if request.method == "PUT":
         data = json.loads(request.body)
         profile = data.get("profile_username")
@@ -221,7 +234,6 @@ def attend(request):
             attending.save()
             change = 1
 
-        print(change)
 
         # Change the number of people attending the event
         return JsonResponse({'change': change})
@@ -250,6 +262,13 @@ def get_rating_value(post, user):
 
 
 def celebrate(request, username):
+    """
+    A page devoted to celebrating a user's runs and statistics.
+    """
+    # Get the user's previous events attended
+    # Add up the stats!
+    events_attended = get_events_attended(request.user).filter(Q(lambda event: get_event_datetime(event) <= datetime.now()))
+    print(events_attended)
     return render(request, "runner/celebrate.html")
 
 
@@ -288,6 +307,7 @@ def create_event(request):
     
         event.date = form.cleaned_data["date"]
         event.time = form.cleaned_data["time"]
+        event.set_date_time()
         event.description = form.cleaned_data["description"]
         event.organiser = request.user
 

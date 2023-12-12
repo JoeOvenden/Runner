@@ -8,7 +8,7 @@ class FollowAdmin(admin.ModelAdmin):
     list_display = ("user_following", "user_followed")
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "organiser", "date", "time", "description")
+    list_display = ("id", "title", "organiser", "date", "time", "date_time", "description")
 
 class EventAttendenceAdmin(admin.ModelAdmin):
     list_display = ("event", "user")
