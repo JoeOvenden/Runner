@@ -62,6 +62,10 @@ textarea, input {
     color: white;
 }
 
+th + th, td + td {
+    border-left: 2vw solid transparent;
+}
+
 textarea::placeholder, input::placeholder {
     color: white;
 }
@@ -309,7 +313,7 @@ form {
 .event {
     @extend %padded;
     @extend %bordered;
-    display: flex;
+    background: linear-gradient(to bottom, $theme-color1, $theme-color2);
 
     p {
         margin-bottom: 0.2rem;
