@@ -8,7 +8,6 @@ let circle = undefined;
 let coordinateInput = undefined;    // Hidden HTML coordinate input element
 let coordinates = [51, 0];
 let icons = getIcons(48);
-console.log(icons);
 
 function changePosition(latlng) {
     // Change position of marker and circle and update hidden html coordinate input element
@@ -63,7 +62,23 @@ function initPosition(position) {       // Set map location to device location
     coordinates = latlng;
     changePosition(latlng);
     map.fitBounds(circle.getBounds());
-    console.log(circle._latlng);
+}
+
+function showError(error) {
+    switch (error.code) {
+        case error.PERMISSION_DENIED:
+            coordinateInput.value = coordinates[0] + ", " + coordinates[1];
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+        case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -118,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     if (getUserLocation) {
-        getLocation(initPosition);
+        getLocation(initPosition, showError);
     }
     else {
         map.fitBounds(circle.getBounds());

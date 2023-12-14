@@ -1,6 +1,6 @@
-export function getLocation(success) {
+export function getLocation(success, error=showError) {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(success, showError);
+        navigator.geolocation.getCurrentPosition(success, error);
     } 
     else {
         alert("Geolocation is not supported by this browser.");
