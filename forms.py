@@ -81,3 +81,16 @@ class EventFilterForm(forms.Form):
             except ValueError:
                 raise forms.ValidationError("Coordinates must be in the form: lat,lng")
         return data
+    
+
+class FilterProfileEventsForm(forms.Form):
+    WHEN_OPTIONS = (
+        ("upcoming", "Upcoming"),
+        ("past", "Past")
+    )
+    STATUS_OPTIONS = (
+        ("attending", "Attending"),
+        ("organised", "Organised")
+    )
+    when = forms.ChoiceField(choices=WHEN_OPTIONS, initial='upcoming', label="")
+    status = forms.ChoiceField(choices=STATUS_OPTIONS, initial='attending', label="")

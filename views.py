@@ -88,54 +88,61 @@ def register(request):
 
 
 def profile(request, username):
-    print("----")
-    print(request.method)
-    print("----")
-    try:
-        user = User.objects.get(username=username)
+    def display(form=FilterProfileEventsForm()):
+        try:
+            user = User.objects.get(username=username)
+        
+        except User.DoesNotExist:
+            return redirect('404')
+
+        if request.user.is_anonymous or not user.followers.filter(user_following=request.user).exists():
+            is_following = False
+        else:
+            is_following = True
+
+
+        try:
+            status = form.cleaned_data['status']
+            when = form.cleaned_data['when']
+        except AttributeError:
+            status = form.fields['status'].initial
+            when = form.fields['when'].initial
+
+
+        if status == "organised":                   # If getting events organised
+            events = user.events_organised.all()    # Get events
+        else:                                       # Otherwise getting events attended
+            events = get_events_attended(user)      # Get events
+
+        if when == "upcoming":                      # If getting upcoming events
+            events = Event.objects.filter(pk__in=events).filter(date_time__gte=datetime.datetime.now())
+        elif when == "past":                        # If getting past events
+            events = Event.objects.filter(pk__in=events).filter(date_time__lt=datetime.datetime.now())
+
+        # TODO: sort events
+
+        # TODO: paginate events
+
+        data = {
+            "profile": user,
+            "follower_count": user.follower_count,
+            "following_count": user.following_count,
+            "is_following": is_following,
+            "events": events,
+            "status": status,
+            "when": when,
+            "form": form,
+        }
+        return render(request, "runner/profile.html", data)
     
-    except User.DoesNotExist:
-        return redirect('404')
 
-    if request.user.is_anonymous or not user.followers.filter(user_following=request.user).exists():
-        is_following = False
-    else:
-        is_following = True
+    if request.method == "POST":
+        # Note: if the form is invalid, returning display is still the intended course of action.
+        form = FilterProfileEventsForm(request.POST)
+        return display(form=form)
 
-    # Get all the people that the user follows
-    follow_objects = user.followings.all()  # Follow objects where user is the follower
-    user_follows = [follow_object.user_followed for follow_object in follow_objects]
-    
-    # Get all the users events that they are either attending or have organised
-    events_attending = get_events_attended(user)
-    events_organised = user.events_organised.all()
-
-    # Split the events into past and upcoming
-    upcoming_events = Event.objects.filter(pk__in=events_attending).filter(date_time__gte=datetime.datetime.now())
-    past_events = Event.objects.filter(pk__in=events_attending).filter(date_time__lt=datetime.datetime.now())
-    upcoming_organised_events = Event.objects.filter(pk__in=events_organised).filter(date_time__gte=datetime.datetime.now())
-    past_organised_events = Event.objects.filter(pk__in=events_organised).filter(date_time__lt=datetime.datetime.now())
-
-    data = {
-        "profile": user,
-        "follower_count": user.follower_count,
-        "following_count": user.following_count,
-        "is_following": is_following,
-        "upcoming_events": upcoming_events,
-        "past_events": past_events,
-        "upcoming_organised_events": upcoming_organised_events,
-        "past_organised_events": past_organised_events,
-    }
-    # data.update(paginate(user_follows, 6, "user_follows"))
-    data.update({
-        "user_follows": user_follows
-    })
-    if request.user.username == username:
-        data.update({
-            "events_attending": get_events_attended(user)
-        })
-
-    return render(request, "runner/profile.html", data)
+    elif request.method == "GET":
+        return display()
 
 
 def paginate(items, count_per_page, items_label):
