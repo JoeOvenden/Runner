@@ -100,13 +100,16 @@ def profile(request, username):
         else:
             is_following = True
 
-
         try:
             status = form.cleaned_data['status']
             when = form.cleaned_data['when']
+            sorting = form.cleaned_data['sorting']
         except AttributeError:
             status = form.fields['status'].initial
             when = form.fields['when'].initial
+            sorting = form.fields['sorting'].initial
+        except KeyError:
+            return HttpResponse(400)
 
 
         if status == "organised":                   # If getting events organised
@@ -119,6 +122,9 @@ def profile(request, username):
         elif when == "past":                        # If getting past events
             events = Event.objects.filter(pk__in=events).filter(date_time__lt=datetime.datetime.now())
 
+        events = events.order_by(sorting)
+
+        print(status, when)
         # TODO: sort events
 
         # TODO: paginate events
@@ -138,7 +144,10 @@ def profile(request, username):
 
     if request.method == "POST":
         # Note: if the form is invalid, returning display is still the intended course of action.
+        # Calling form.is_valid() ensures that form.cleaned_data is available.
         form = FilterProfileEventsForm(request.POST)
+        if not form.is_valid():
+            print("INVALID_FORM")
         return display(form=form)
 
     elif request.method == "GET":

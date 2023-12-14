@@ -92,5 +92,14 @@ class FilterProfileEventsForm(forms.Form):
         ("attending", "Attending"),
         ("organised", "Organised")
     )
+    # LHS in sorting_options correspond to Event model field names. 
+    # "-" is a prefix used to reverse ordering when using "Q.sort_by()"
+    SORTING_OPTIONS = (
+        ("date_time", "Newest to oldest"),
+        ("-date_time", "Oldest to newest"),
+        ("distance", "Sort by distance (ascending)"),
+        ("-distance", "Sort by distance (descending)")
+    )
     when = forms.ChoiceField(choices=WHEN_OPTIONS, initial='upcoming', label="")
     status = forms.ChoiceField(choices=STATUS_OPTIONS, initial='attending', label="")
+    sorting = forms.ChoiceField(choices=SORTING_OPTIONS, initial='date_time', label="")
