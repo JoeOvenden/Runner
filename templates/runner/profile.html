@@ -82,7 +82,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="pagination col-4">
+                <div class="pagination col-4 align-right">
                     {% url 'runner:profile' profile as url %}
                     {% include 'runner/pagination.html' with page=page_obj url=url %}
                 </div>

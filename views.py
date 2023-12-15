@@ -123,7 +123,7 @@ def profile(request, username):
             events = Event.objects.filter(pk__in=events).filter(date_time__lt=datetime.datetime.now())
 
         events = events.order_by(sorting)
-        events, page_obj = paginate(request, events, 1)
+        events, page_obj = paginate(request, events, 10)
 
         data = {
             "profile": user,

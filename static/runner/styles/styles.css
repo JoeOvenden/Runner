@@ -363,4 +363,9 @@ form {
   background-color: rgb(234, 110, 162);
 }
 
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
 /*# sourceMappingURL=styles.css.map */
