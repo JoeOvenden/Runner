@@ -1,0 +1,15 @@
+{% load custom_filters %}
+
+{% with page_range=page_obj.paginator.page_range|range_around_current:page_obj.number %}
+    {% if 1 not in page_range %}
+        <a href="{{ url }}?page=1">«</a>
+    {% endif %}
+    {% for num in page_range %}
+        <a href="{{ url }}?page={{ num }}" {% if num == page_obj.number %}class="current"{% endif %}>
+            {{ num }}
+        </a>
+    {% endfor %}
+    {% if page_obj.paginator.num_pages not in page_range %}
+        <a href="{{ url }}?page={{ page_obj.paginator.num_pages }}">»</a>
+    {% endif %}
+{% endwith %}
