@@ -3,6 +3,7 @@ $theme-color2: rgb(218, 12, 129);
 $theme-color3: rgb(148, 11, 146);
 $theme-color4: rgb(97, 12, 159);
 
+$theme-color1-accent: rgb(234, 110, 162);
 $theme-color-light: rgb(255, 143, 189);
 
 $font-color-light: white;
@@ -438,3 +439,25 @@ form {
     transition: max-height 0.5s ease-out;
   }
 
+.pagination {
+    display: inline-block;
+    a {
+        // color: white;
+        background-color: $theme-color1;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .25s;
+    }
+
+    .current {
+        background-color: $theme-color1-accent;
+        color: white;
+    }
+    
+    a:hover {
+        background-color: $theme-color2;
+    }
+
+    a:hover {background-color: $theme-color1-accent;}
+}

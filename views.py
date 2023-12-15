@@ -123,11 +123,7 @@ def profile(request, username):
             events = Event.objects.filter(pk__in=events).filter(date_time__lt=datetime.datetime.now())
 
         events = events.order_by(sorting)
-
-        print(status, when)
-        # TODO: sort events
-
-        # TODO: paginate events
+        events, page_obj = paginate(request, events, 1)
 
         data = {
             "profile": user,
@@ -135,6 +131,7 @@ def profile(request, username):
             "following_count": user.following_count,
             "is_following": is_following,
             "events": events,
+            "page_obj": page_obj,
             "status": status,
             "when": when,
             "form": form,
@@ -154,21 +151,15 @@ def profile(request, username):
         return display()
 
 
-def paginate(items, count_per_page, items_label):
+def paginate(request, items, count_per_page):
+    p = Paginator(items, count_per_page)        # Create paginator object
 
-
-    # Sort posts in reverse chronological order and then make a paginator with n posts per page
-    # items = sorted(posts, key=lambda post : post.timestamp, reverse=True)
-    p = Paginator(items, count_per_page)
-
-    # Get the page number
     page_number = 1
-    """
-    try:
-        page_number = int(request.GET.get('page', 1))
-    except ValueError:
-        page_number = 1
-    """
+    if 'page' in request.GET:
+        try:
+            page_number = int(request.GET['page'])
+        except ValueError:
+            pass
 
     # If getting posts for a page that doesn't exist
     if page_number > p.num_pages or page_number < 1:
@@ -177,10 +168,7 @@ def paginate(items, count_per_page, items_label):
     page = p.page(page_number)      # Get the page object
     page_items = page.object_list
 
-    return {
-        items_label: page_items,
-        "page_obj": page
-    }
+    return page_items, page
 
 
 @login_required

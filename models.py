@@ -69,8 +69,8 @@ class Event(models.Model):
             formatted_distance += "s"
         return formatted_distance
     
-    # def set_date_time(self):
-    #     self.date_time = datetime.datetime.combine(self.date, self.time)
+    def formatted_time(self):
+        return self.date_time.strftime("%I:%M%p").lower()
     
 
 class Event_Attendence(models.Model):

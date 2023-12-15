@@ -14,7 +14,7 @@
                 </tr>
                 <tr>
                     <th>Scheduled for:</th>
-                    <th><span id="time">{{ event.date_time }} <span id="date">{{ event.date }}</span></span></th>
+                    <th><span id="date">{{ event.date_time.date }}</span>, <span id="time">{{ event.formatted_time }}</span></th>
                 </tr>
                 <tr>
                     <th>Organised by:</th>

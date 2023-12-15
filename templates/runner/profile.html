@@ -1,4 +1,5 @@
 {% extends "runner/layout.html" %}
+{% load custom_filters %}
 
 {% block title %}{{ profile.username }}{% endblock %}
 
@@ -71,15 +72,34 @@
             <!-- User events -->
             <hr>
             <p>Filter events:</p>
-            <form action="{% url 'runner:profile' profile %}" method="post">
-                {% csrf_token %}
-                <div class="flex-row">
-                    {{ form }}
-                    <input type="submit" value="Submit">
+            <div class="row">
+                <div class="col-9">
+                    <form action="{% url 'runner:profile' profile %}" method="post">
+                        {% csrf_token %}
+                        <div class="flex-row">
+                            {{ form }}
+                            <input type="submit" value="Submit">
+                        </div>
+                    </form>
                 </div>
-            </form>
-            &nbsp;
+                <div class="pagination col-3">
+                    {% with page_range=page_obj.paginator.page_range|range_around_current:page_obj.number %}
+                        {% if 1 not in page_range %}
+                            <a href="{% url 'runner:profile' profile %}?page=1">«</a>
+                        {% endif %}
+                        {% for num in page_range %}
+                            <a href="{% url 'runner:profile' profile %}?page={{ num }}" {% if num == page_obj.number %}class="current"{% endif %}>
+                                {{ num }}
+                            </a>
+                        {% endfor %}
+                        {% if page_obj.paginator.num_pages not in page_range %}
+                            <a href="{% url 'runner:profile' profile %}?page={{ page_obj.paginator.num_pages }}">»</a>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
 
+            <hr>
             <div>
                 {% if status == "attending" %}
                     <h3>{% if user == profile %}Your{% else %}{{ profile }}'s{% endif %} {{ when }} events</h3>

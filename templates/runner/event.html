@@ -1,4 +1,5 @@
 {% extends "runner/layout.html" %}
+{% load humanize %}
 
 {% block head %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -17,7 +18,7 @@
                 <div class="col-6">
                     <p>Description: {{ event.description }}</p>
                     <p>Date: {{ event.date_time.date }}</p>
-                    <p>Time: {{ event.date_time.time }}</p>
+                    <p>Time: {{ event.formatted_time }}</p>
                     <p>Organiser: <a href="{% url 'runner:profile' event.organiser %}">{{ event.organiser }}</a></p>
                 </div>
                 <div class="col-6">

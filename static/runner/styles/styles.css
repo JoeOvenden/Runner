@@ -342,4 +342,25 @@ form {
   transition: max-height 0.5s ease-out;
 }
 
+.pagination {
+  display: inline-block;
+}
+.pagination a {
+  background-color: rgb(233, 87, 147);
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color 0.25s;
+}
+.pagination .current {
+  background-color: rgb(234, 110, 162);
+  color: white;
+}
+.pagination a:hover {
+  background-color: rgb(218, 12, 129);
+}
+.pagination a:hover {
+  background-color: rgb(234, 110, 162);
+}
+
 /*# sourceMappingURL=styles.css.map */
