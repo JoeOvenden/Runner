@@ -1,0 +1,39 @@
+{% extends "runner/layout.html" %}
+
+{% block body %}
+
+    <div id="top-container">
+        <div>
+            <div id="avatar" class="space-around">
+                {% include 'runner/avatar.html' with avatar=user.avatar %}   
+            </div>     
+            <button id="save-button">Save Avatar</button>
+            <div id="components" class="row">
+                <div class="col-6">
+                    <p class="collapsible">Mouths</p>
+                    <div id="mouths-selection" class="content flex-start">
+                        {% for mouth in mouths %}
+                            <div class="component-container">
+                                <img id="mouth" class="component" src="/{{ mouth }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-6">
+                    <p class="collapsible">Eyes</p>
+                    <div id="eyes-selection" class="content flex-start">
+                        {% for avatar_eyes in eyes %}
+                            <div class="component-container">
+                                <img id="eyes" class="component" src="/{{ avatar_eyes }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% load static %}
+    <script src={% static 'runner/scripts/edit_avatar.js' %}></script>
+    
+{% endblock %}

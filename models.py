@@ -7,6 +7,9 @@ import datetime
 
 class User(AbstractUser):
     profile_picture = models.ImageField(upload_to='profile_pics', blank=True)
+    use_avatar = models.BooleanField(default=True)
+    avatar_mouth = models.CharField(max_length=100, default="open_wide.svg")
+    avatar_eyes = models.CharField(max_length=100, default="smooth_shocked.svg")
     bio = models.CharField(max_length=800, blank=True)
     phone_number = PhoneNumberField(blank=True)
     account_creation_date = models.DateField(auto_now_add=True)
@@ -18,6 +21,12 @@ class User(AbstractUser):
     Longest distance
 
     """
+
+    def avatar(self):
+        return {
+            "mouth": self.avatar_mouth,
+            "eyes": self.avatar_eyes
+        }
 
 
 class Follow(models.Model):

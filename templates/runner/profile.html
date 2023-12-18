@@ -14,7 +14,7 @@
                             {% if profile.profile_picture %}
                                 <img id="profile-pic" src="{{ MEDIA_URL }}{{ profile.profile_picture }}" alt="Profile Picture">
                             {% else %}
-                                <img id="avatar" src="{{ MEDIA_URL }}/avatars/derp.svg" alt="avatar">
+                                {% include 'runner/avatar.html' with avatar=profile.avatar %}
                             {% endif %}
                         </div>
                         <div id="username-div">
@@ -47,6 +47,7 @@
                 <div id="edit-profile">
                     {% if user == profile %}
                         <a href="{% url 'runner:edit_profile' %}">Edit profile</a>
+                        <br><a href="{% url 'runner:edit_avatar' %}">Edit avatar</a>
                     {% endif %}
                 </div>
                 <div id="celebrate">
@@ -83,8 +84,7 @@
                     </form>
                 </div>
                 <div class="pagination col-4 align-right">
-                    {% url 'runner:profile' profile as url %}
-                    {% include 'runner/pagination.html' with page=page_obj url=url %}
+                    {% include 'runner/pagination.html' with page=page link=link %}
                 </div>
             </div>
 

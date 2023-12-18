@@ -12,10 +12,8 @@
 
         <div class="padded">
             <!-- Filters form -->
-            <form action="{% url 'runner:events_search' %}" method="post">
-                {% csrf_token %}
+            <form action="{% url 'runner:events_search' %}" method="get">
                 <input type="text" placeholder="Search for events here..." name="user_search">
-                
                 <table>
                     <tr>
                     {% for field in form %}
@@ -40,6 +38,9 @@
                 <p>Click on the map to change the radius centre.</p>
                 <button>Submit</button>
             </form>
+            <div class="pagination">
+                {% include 'runner/pagination.html' with page=page %}
+            </div>
         </div>
 
         {% include 'runner/event-cards.html' with events=events %}

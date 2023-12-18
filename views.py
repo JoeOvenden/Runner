@@ -17,6 +17,21 @@ import datetime
 from .models import *
 from .forms import *
 
+import os
+
+def list_files_in_directory(directory_path):
+    file_list = []
+    
+    # Iterate over all files in the directory
+    for filename in os.listdir(directory_path):
+        filepath = os.path.join(directory_path, filename)
+        
+        # Check if it's a regular file
+        if os.path.isfile(filepath):
+            file_list.append(filepath)
+    
+    return file_list
+
 
 def get_events_attended(user, reverse=False):
     event_attendence_objects = user.events_attending.all()
@@ -111,7 +126,6 @@ def profile(request, username):
         except KeyError:
             return HttpResponse(400)
 
-
         if status == "organised":                   # If getting events organised
             events = user.events_organised.all()    # Get events
         else:                                       # Otherwise getting events attended
@@ -123,7 +137,7 @@ def profile(request, username):
             events = Event.objects.filter(pk__in=events).filter(date_time__lt=datetime.datetime.now())
 
         events = events.order_by(sorting)
-        events, page_obj = paginate(request, events, 10)
+        events, page = paginate(request, events, 25)
 
         data = {
             "profile": user,
@@ -131,7 +145,7 @@ def profile(request, username):
             "following_count": user.following_count,
             "is_following": is_following,
             "events": events,
-            "page_obj": page_obj,
+            "page": page,
             "status": status,
             "when": when,
             "form": form,
@@ -182,6 +196,29 @@ def edit_profile(request):
     else:
         form = ProfileForm(instance=user)
     return render(request, "runner/edit_profile.html", {"form": form})
+
+
+@csrf_exempt
+@login_required
+def edit_avatar(request):
+    if request.method == "GET":
+        # Get avatar components for user to choose from
+        components_path = "media/avatars/components/"
+        eyes = list_files_in_directory(components_path + "eyes/")
+        mouths = list_files_in_directory(components_path + "mouths/")
+        
+        # Return template with components
+        return render(request, "runner/edit_avatar.html", {
+            "eyes": eyes,
+            "mouths": mouths
+        })
+    
+    elif request.method == "PUT":
+        data = json.loads(request.body)
+        request.user.avatar_eyes = data["eyes"]
+        request.user.avatar_mouth = data["mouth"]
+        request.user.save()
+        return HttpResponse(200)
 
 
 @csrf_exempt
@@ -413,15 +450,19 @@ def radius_filter(events, latlng, radius):
     events = list(filter(lambda event: distance(event) <= radius, events))
     return events
 
+
 def events_search(request):
-    def display(events=None, form=EventFilterForm()):
+    def display(events=Event.objects.none(), form=EventFilterForm()):
+        events, page = paginate(request, events, 25)
+
         return render(request, "runner/events_search.html", {
             "form": form,
-            "events": events
+            "events": events,
+            "page": page
         })
     
-    if request.method == "POST":
-        filter_form = EventFilterForm(request.POST)
+    if len(request.GET) != 0:
+        filter_form = EventFilterForm(request.GET)
         
         # If the form is not valid then return page back to them with the form
         if not filter_form.is_valid():
@@ -431,14 +472,13 @@ def events_search(request):
         end_date = filter_form.cleaned_data["end_date"]
         min_distance = filter_form.cleaned_data["min_distance"]
         max_distance = filter_form.cleaned_data["max_distance"]
-        title_filter = request.POST["user_search"]
+        title_filter = request.GET["user_search"]
 
         # Get all events between the start and end date filters
         events = get_events(start_date=start_date, end_date=end_date, min_distance=min_distance, 
                             max_distance=max_distance, title_filter=title_filter)
         
         latlng_str = filter_form.cleaned_data["coordinates"]
-        print(latlng_str)
         search_radius = filter_form.cleaned_data["search_radius"]
         try:
             latlng = [float(x) for x in latlng_str]
@@ -448,6 +488,8 @@ def events_search(request):
             print("Error: Radius or coordinates value error.")
 
         return display(events=events, form=filter_form)
-
-    # Display page
-    return display()
+    
+    else:
+        # Display page
+        print("JUST LOADED THE PAGE")
+        return display()
