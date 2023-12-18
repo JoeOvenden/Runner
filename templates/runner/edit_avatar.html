@@ -4,8 +4,8 @@
 
     <div id="top-container">
         <div>
-            <div id="avatar" class="space-around">
-                {% include 'runner/avatar.html' with avatar=user.avatar %}   
+            <div id="avatar">
+                {% include 'runner/avatar.html' with avatar=user.avatar size=200 %}   
             </div>     
             <button id="save-button">Save Avatar</button>
             <div id="components" class="row">

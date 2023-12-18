@@ -14,7 +14,7 @@
                             {% if profile.profile_picture %}
                                 <img id="profile-pic" src="{{ MEDIA_URL }}{{ profile.profile_picture }}" alt="Profile Picture">
                             {% else %}
-                                {% include 'runner/avatar.html' with avatar=profile.avatar %}
+                                {% include 'runner/avatar.html' with avatar=profile.avatar size=200 %}
                             {% endif %}
                         </div>
                         <div id="username-div">

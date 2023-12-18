@@ -5,7 +5,7 @@
             {% if profile.profile_picture %}
                 <img id="profile-pic" src="{{ MEDIA_URL }}{{ profile.profile_picture }}" alt="Profile Picture">
             {% else %}
-                <img id="avatar" src="{{ MEDIA_URL }}/avatars/derp.svg" alt="avatar">
+                {% include 'runner/avatar.html' with avatar=profile.avatar size=150 class='hover-effect' %}
             {% endif %}
         </a>
     </div>

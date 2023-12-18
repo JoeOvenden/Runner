@@ -1,11 +1,11 @@
-<svg width="200" height="200">
-    
+<svg {% if class %}class="{{ class}}"{% endif %} width="96%" height="96%" viewBox="0 0 {{ size }} {{ size }}" preserveAspectRatio="xMidYMid meet">
+
     <!-- Draw head -->
-    <circle cx="100" cy="100" r="100" fill="#000000"/>
-    <circle cx="100" cy="100" r="98" fill="#FFFF00"/>
+    <circle cx="{% widthratio 0.5 1 size %}" cy="{% widthratio 0.5 1 size %}" r="{% widthratio 0.5 1 size %}" fill="#000000"/>
+    <circle cx="{% widthratio 0.5 1 size %}" cy="{% widthratio 0.5 1 size %}" r="{% widthratio 0.5 1 size|add:"-4" %}" fill="#FFFF00"/>
 
     <!-- Draw mouth and eyes -->
-    <image id="avatar-eyes" href="{{ MEDIA_URL }}avatars/components/eyes/{{ avatar.eyes }}" %}" width="70%" height="70%" x="40"/>
-    <image id="avatar-mouth" href="{{ MEDIA_URL }}avatars/components/mouths/{{ avatar.mouth }}" %}" width="55%" height="55%" x="50" y="80"/>
+    <image id="avatar-eyes" href="{{ MEDIA_URL }}avatars/components/eyes/{{ avatar.eyes }}" width="70%" height="70%" x="20%"/>
+    <image id="avatar-mouth" href="{{ MEDIA_URL }}avatars/components/mouths/{{ avatar.mouth }}" width="55%" height="55%" x="25%" y="40%"/>
 
-</svg>     
+</svg>
