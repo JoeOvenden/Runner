@@ -10,6 +10,7 @@
             </form>
         </div>
 
+        {% include "runner/pagination.html" with page=page %}
         {% include "runner/profile-cards.html" with profiles=profiles %}
         
     </div>

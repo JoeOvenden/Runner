@@ -38,9 +38,7 @@
                 <p>Click on the map to change the radius centre.</p>
                 <button>Submit</button>
             </form>
-            <div class="pagination">
-                {% include 'runner/pagination.html' with page=page %}
-            </div>
+            {% include 'runner/pagination.html' with page=page %}
         </div>
 
         {% include 'runner/event-cards.html' with events=events %}

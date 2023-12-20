@@ -2,16 +2,18 @@
 
 {% with page_range=page.paginator.page_range|range_around_current:page.number %}
     {% if page_range|length != 1 %}
-        {% if 1 not in page_range %}
-            <a href="?{% query_transform page=1 %}">«</a>
-        {% endif %}
-        {% for num in page_range %}
-            <a href="?{% query_transform page=num %}" {% if num == page.number %}class="current"{% endif %}>
-                {{ num }}
-            </a>
-        {% endfor %}
-        {% if page.paginator.num_pages not in page_range %}
-            <a href="?{% query_transform page=page.paginator.num_pages %}">»</a>
-        {% endif %}
+        <div class="pagination {% if classes %}{{ classes }}{% endif %}">
+            {% if 1 not in page_range %}
+                <a href="?{% query_transform page=1 %}">«</a>
+            {% endif %}
+            {% for num in page_range %}
+                <a href="?{% query_transform page=num %}" {% if num == page.number %}class="current"{% endif %}>
+                    {{ num }}
+                </a>
+            {% endfor %}
+            {% if page.paginator.num_pages not in page_range %}
+                <a href="?{% query_transform page=page.paginator.num_pages %}">»</a>
+            {% endif %}
+        </div>
     {% endif %}
 {% endwith %}

@@ -487,6 +487,10 @@ form {
     a:hover {background-color: $theme-color1-accent;}
 }
 
+.pagination:empty {
+    display: none;
+}
+
 .align-right {
     display: flex;
     justify-content: flex-end;

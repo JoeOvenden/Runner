@@ -345,8 +345,11 @@ def user_search(request):
         else:
             profiles = User.objects.all()
 
+        profiles, page = paginate(request, profiles, 25)
+
         return render(request, "runner/user-search.html", {
-            "profiles": profiles
+            "profiles": profiles,
+            "page": page,
         })
 
 
