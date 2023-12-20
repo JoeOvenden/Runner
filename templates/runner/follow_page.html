@@ -5,7 +5,15 @@
     <div id="top-container">
         <div>
             <h3>Users followed</h3>
+            <div>
+                <form action="{% url 'runner:follow_page' follow_type %}" method="get" class="flex-row">
+                    <input type="text" placeholder="Search for users here..." name="user_search">
+                    <button>Submit</button> 
+                </form>
+            </div>
+            
             {% include "runner/profile-cards.html" with profiles=profiles %}
+            {% include "runner/pagination.html" with page=page %}
         </div>
     </div>
     

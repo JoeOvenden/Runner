@@ -329,13 +329,18 @@ def celebrate(request, username):
     return render(request, "runner/celebrate.html")
 
 
+def filter_users_by_username(request, profiles=User.objects.all()):
+    # Optionally takes profiles to filter or otherwise uses all users and then filters by the user search
+    # If there is not user search then returns all profiles
+    if "user_search" in request.GET:
+        user_search = request.GET["user_search"]
+        profiles = profiles.filter(username__icontains=user_search)
+    return profiles
+
+
 def user_search(request):
     if request.method == "GET":
-        if "user_search" in request.GET:
-            user_search = request.GET["user_search"]
-            profiles = User.objects.filter(username__icontains=user_search)
-        else:
-            profiles = User.objects.all()
+        profiles = filter_users_by_username(request)
 
         profiles, page = paginate(request, profiles, 25)
 
@@ -507,8 +512,13 @@ def follow_page(request, follow_type):
         follow_objects = request.user.followers.all()
         profiles = User.objects.filter(followings__in=follow_objects)
 
+    profiles = filter_users_by_username(request, profiles)
+    profiles, page = paginate(request, profiles, 3)
+
     return render(request, "runner/follow_page.html", {
         "profiles": profiles,
+        "page": page,
+        "follow_type": follow_type,
     })
 
 
