@@ -33,10 +33,14 @@ def list_files_in_directory(directory_path):
     return file_list
 
 
-def get_events_attended(user, reverse=False):
+def get_events_attended(user, reverse=False, start_date=None, end_date=None):
     event_attendence_objects = user.events_attending.all()
     events_attending = event_attendence_objects.values("event")
     events_attending = Event.objects.filter(pk__in=events_attending).order_by('date_time')
+    if start_date is not None:
+        events_attending = events_attending.filter(date_time__gte=start_date)
+    if end_date is not None:
+        events_attending = events_attending.filter(date_time__lte=end_date)
     return events_attending
 
 
@@ -46,7 +50,14 @@ def get_event_datetime(event):
 
 
 def index(request):
-    return render(request, "runner/index.html")
+    events = []
+    if not request.user.is_anonymous:
+        start_date = datetime.datetime.now()
+        end_date = start_date + datetime.timedelta(days=7)
+        events = get_events_attended(request.user, start_date=start_date, end_date=end_date)
+    return render(request, "runner/index.html", {
+        "events": events,
+    })
 
 
 @csrf_exempt

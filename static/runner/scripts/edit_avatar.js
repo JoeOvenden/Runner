@@ -53,9 +53,45 @@ function addSaveButtonEventListener() {
   fetch("/runner/edit_avatar", {
     method: 'PUT',
     body: JSON.stringify(filenames)
-  }).then(response => console.log(response))
+  }).then(response => {
+    if (response.status == 200) {
+      document.querySelector("#success-message").innerHTML = "Avatar successfully saved.";
+    }
+  })
     .catch(error => console.error("Error: ", error));
     
+  });
+}
+
+function isHexColor(str) {
+  // Regular expression to match a hexadecimal color code. Checks for just 6 digit color codes.
+  const hexColorRegex = /^#([0-9A-Fa-f]{6})$/;
+
+  // Test if the input string matches the regular expression
+  return hexColorRegex.test(str);
+}
+
+function changeFaceColour(color) {
+  let face = document.querySelector("#face");
+  face.setAttribute('fill', color);
+}
+
+function addColorPickingEventListeners() {
+  let colorPicker = document.querySelector("#colorPicker");
+  let colorInput = document.querySelector("#colorInput");
+
+  // When the color picker is changed, change the value in the color input and the face color
+  colorPicker.addEventListener('change', e => {
+    changeFaceColour(e.target.value);
+    colorInput.setAttribute('value', e.target.value);
+  });
+
+  // When the color input is changed, if valid change the color of the color picker and face colour.
+  colorInput.addEventListener('change', e => {
+    if (isHexColor(e.target.value)) {
+      changeFaceColour(e.target.value);
+      colorPicker.value = e.target.value;
+    }
   });
 }
 
@@ -64,4 +100,5 @@ document.addEventListener("DOMContentLoaded", () => {
   addComponentEventListeners();
   addCollapsibleEventListeners();
   addSaveButtonEventListener();
+  addColorPickingEventListeners();
 });

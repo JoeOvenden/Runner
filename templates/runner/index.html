@@ -1,15 +1,43 @@
 {% extends "runner/layout.html" %}
+{% load static %}
 
 {% block body %}
 
-    <div id="top-container">
-        <div>
-            {% if user.is_authenticated %}
-                <h5><a href="{% url 'runner:events_search' %}">Browse events</a></h5>
-            {% else %}
-                <h5><a href="{% url 'runner:login' %}">Login</a> to browse events!</h5>
-            {% endif %}
+    <div id="top-container-no-bg" class="row">
+        <div id="left-side" class="col-7 margin-left-right">
+            <div id="about-runner">
+            
+            </div>
+            <div id="browse-events">
+                {% if user.is_authenticated %}
+                    <h5><a href="{% url 'runner:events_search' %}">Browse running events</a></h5>
+                {% else %}
+                    <h5><a href="{% url 'runner:login' %}">Login</a> to browse events!</h5>
+                {% endif %}
+                <p>Want to join a running club but the times just don't quite work out? No worries! Join other people on their runs with this online flexible running community.</p>
+                <div id="image-container">
+                    <a href="{% url 'runner:events_search' %}"><img src="{% static 'runner/images/map.png' %}"></a>
+                </div>
+            </div>
+
         </div>
+        {% if user.is_authenticated %}
+        <div id="right-side" class="col-4 margin-left-right">
+                <div id="stats">
+                    {% if events|length == 0%}
+                        <p>You are not attending any events in the next 7 days. Now's the time to get back to it!</p>
+                    {% else %}
+                        <p>You are attending {{ events|length }} event{{ events|length|pluralize:"s" }} in the next week.</p>
+                        <ul>
+                            {% for event in events %}
+                                <li><a href="{% url 'runner:event' event.id %}">{{ event }}</a></li>
+                            {% endfor %}
+                        </ul>
+
+                    {% endif %}
+                </div>
+        </div>
+        {% endif %}
     </div>
     
 {% endblock %}

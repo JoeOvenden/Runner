@@ -2,7 +2,7 @@
 
     <!-- Draw head -->
     <circle cx="{% widthratio 0.5 1 size %}" cy="{% widthratio 0.5 1 size %}" r="{% widthratio 0.5 1 size %}" fill="#000000"/>
-    <circle cx="{% widthratio 0.5 1 size %}" cy="{% widthratio 0.5 1 size %}" r="{% widthratio 0.5 1 size|add:"-4" %}" fill="#FFFF00"/>
+    <circle id="face" cx="{% widthratio 0.5 1 size %}" cy="{% widthratio 0.5 1 size %}" r="{% widthratio 0.5 1 size|add:"-4" %}" fill="#FFFF00"/>
 
     <!-- Draw mouth and eyes -->
     <image id="avatar-eyes" href="{{ MEDIA_URL }}avatars/components/eyes/{{ avatar.eyes }}" width="70%" height="70%" x="20%"/>

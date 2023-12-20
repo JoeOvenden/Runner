@@ -8,6 +8,9 @@
                 {% include 'runner/avatar.html' with avatar=user.avatar size=200 %}   
             </div>     
             <button id="save-button">Save Avatar</button>
+            <div id="success-message"></div>
+            <input type="color" id="colorPicker" name="colorPicker" value="#ffff00">
+            <input id="colorInput" value="#ffff00">
             <div id="components" class="row">
                 <div class="col-6">
                     <p class="collapsible">Mouths</p>

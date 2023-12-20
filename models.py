@@ -50,7 +50,7 @@ class Event(models.Model):
     route = models.FileField(upload_to='gpx_files', blank=True)
 
     def __str__(self):
-        return f"{self.id}: {self.title}"
+        return f"{self.date_time.date().strftime('%d-%m-%Y')}: {self.title}"
 
     def formatted_duration(self):
         text = ""
