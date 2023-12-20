@@ -4,8 +4,7 @@
 
     <div id="top-container">
         <div>
-            <form action="{% url 'runner:user_search' %}" method="post">
-                {% csrf_token %}
+            <form action="{% url 'runner:user_search' %}" method="get">
                 <input type="text" placeholder="Search for users here..." name="user_search">
                 <button>Submit</button>
             </form>

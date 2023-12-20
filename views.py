@@ -338,21 +338,16 @@ def celebrate(request, username):
 
 
 def user_search(request):
-    print(request.method)
-    if request.method == "POST":
-        try:
-            user_search = request.POST["user_search"]
-        except KeyError:
-            return render(request, "runner/user-search.html")
-        
-        profiles = User.objects.filter(username__icontains=user_search)
+    if request.method == "GET":
+        if "user_search" in request.GET:
+            user_search = request.GET["user_search"]
+            profiles = User.objects.filter(username__icontains=user_search)
+        else:
+            profiles = User.objects.all()
 
-    elif request.method == "GET":
-        profiles = User.objects.all()
-
-    return render(request, "runner/user-search.html", {
-        "profiles": profiles
-    })
+        return render(request, "runner/user-search.html", {
+            "profiles": profiles
+        })
 
 
 def create_event(request):
