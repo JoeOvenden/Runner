@@ -502,6 +502,12 @@ form {
     align-items: center;
 }
 
+.space-between {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .flex-start {
     display: flex;
     justify-content: flex-start;

@@ -4,12 +4,20 @@
 
     <div id="top-container">
         <div>
-            <h3>Users followed</h3>
-            <div>
-                <form action="{% url 'runner:follow_page' follow_type %}" method="get" class="flex-row">
-                    <input type="text" placeholder="Search for users here..." name="user_search">
-                    <button>Submit</button> 
-                </form>
+            <div class="space-between">
+                <h3>
+                    {% if follow_type == "followers" %}
+                        Followers
+                    {% else %}
+                        Users you follow
+                    {% endif %}
+                </h3>
+                <div>
+                    <form action="{% url 'runner:follow_page' follow_type %}" method="get" class="flex-row">
+                        <input type="text" placeholder="Search for users here..." name="user_search">
+                        <button>Submit</button> 
+                    </form>
+                </div>
             </div>
             
             {% include "runner/profile-cards.html" with profiles=profiles %}
