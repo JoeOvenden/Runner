@@ -21,4 +21,6 @@ urlpatterns = [
     path("404", views.page_not_found, name="404"),
     path("events_search", views.events_search, name="events_search"),
     path("edit_avatar", views.edit_avatar, name="edit_avatar"),
+    path("following", views.following, name="following"),
+    path("followers", views.followers, name="followers"),
 ]

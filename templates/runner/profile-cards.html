@@ -1,5 +1,7 @@
 <div id="profile-cards">
     {% for profile in profiles %}
         {% include "runner/profile-card.html" with profile=profile %}
+    {% empty %}
+        <h5>No users found.</h5>
     {% endfor %}
 </div>

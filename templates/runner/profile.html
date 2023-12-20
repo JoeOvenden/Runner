@@ -40,8 +40,13 @@
                         </div>
                     </div>
                     <div id="follow-counts">
-                        <h3>Followers: <span id="followers">{{ follower_count }}</span></h3>
-                        <h3>Following: <span id="following">{{ following_count }}</span></h3>
+                        {% if request.user == profile %}
+                            <a href="{% url 'runner:followers' %}"><h3>Followers: <span id="followers">{{ follower_count }}</span></h3></a>
+                            <a href="{% url 'runner:following' %}"><h3>Following: <span id="following">{{ following_count }}</span></h3></a>
+                        {% else %}
+                            <h3>Followers: <span id="followers">{{ follower_count }}</span></h3>    
+                            <h3>Following: <span id="following">{{ following_count }}</span></h3>
+                        {% endif %}
                     </div>
                 </div>
                 <div id="edit-profile">

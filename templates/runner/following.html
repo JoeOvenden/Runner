@@ -1,0 +1,12 @@
+{% extends "runner/layout.html" %}
+
+{% block body %}
+
+    <div id="top-container">
+        <div>
+            <h3>Users followed</h3>
+            {% include "runner/profile-cards.html" with profiles=following %}
+        </div>
+    </div>
+    
+{% endblock %}

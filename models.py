@@ -19,7 +19,6 @@ class User(AbstractUser):
     """
     Total Km run
     Longest distance
-
     """
 
     def avatar(self):

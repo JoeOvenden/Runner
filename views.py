@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from decimal import Decimal
@@ -188,7 +188,7 @@ def paginate(request, items, count_per_page):
 
     # If getting posts for a page that doesn't exist
     if page_number > p.num_pages or page_number < 1:
-        return None
+        return None, p.page(1)
 
     page = p.page(page_number)      # Get the page object
     page_items = page.object_list
@@ -302,14 +302,6 @@ def attend(request):
 
         # Change the number of people attending the event
         return JsonResponse({'change': change})
-
-
-# @login_required(login_url='/login')
-# def following_page(request):
-#     followings = request.user.followings.all()                                  # Get all the following objects of the user
-#     users_followed = [following.user_followed for following in followings]      # Get all the user objects of the users followed
-#     posts = Post.objects.filter(user__in=users_followed)                        # Get all the posts from the users followed
-#     return render(request, "network/following.html", get_posts_data(request, posts))
 
 
 def get_rating_value(post, user):
@@ -500,5 +492,30 @@ def events_search(request):
     
     else:
         # Display page
-        print("JUST LOADED THE PAGE")
         return display()
+    
+    
+@login_required(login_url="runner:login")
+def follow_page(request, follow_type):
+    # Page showing accounts that are being followed by the user or accounts that are following
+    # the user depending on follow_type
+    if follow_type == "following":
+        follow_objects = request.user.followings.all()
+        profiles = User.objects.filter(followers__in=follow_objects)
+
+    elif follow_type == "followers":
+        follow_objects = request.user.followers.all()
+        profiles = User.objects.filter(followings__in=follow_objects)
+
+    return render(request, "runner/follow_page.html", {
+        "profiles": profiles,
+    })
+
+
+def following(request):
+    return follow_page(request, "following")
+
+
+def followers(request):
+    return follow_page(request, "followers")
+
