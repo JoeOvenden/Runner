@@ -226,8 +226,9 @@ def edit_avatar(request):
     
     elif request.method == "PUT":
         data = json.loads(request.body)
-        request.user.avatar_eyes = data["eyes"]
-        request.user.avatar_mouth = data["mouth"]
+        request.user.avatar_eyes = data["filenames"]["eyes"]
+        request.user.avatar_mouth = data["filenames"]["mouth"]
+        request.user.avatar_colour = data["colour"]
         request.user.save()
         return HttpResponse(200)
 

@@ -32,6 +32,8 @@ function addComponentEventListeners() {
 
 function addSaveButtonEventListener() {
   let button = document.querySelector("#save-button");
+
+  // Get the file names for the mouth and eye components chosen
   button.addEventListener('click', () => {
     let filenames = {};
     ['mouth', 'eyes'].forEach(id => {
@@ -49,16 +51,24 @@ function addSaveButtonEventListener() {
       }
     });
 
-  // TODO: save parts
-  fetch("/runner/edit_avatar", {
-    method: 'PUT',
-    body: JSON.stringify(filenames)
-  }).then(response => {
-    if (response.status == 200) {
-      document.querySelector("#success-message").innerHTML = "Avatar successfully saved.";
+    // Get the avatar colour chosen
+    let colour = document.querySelector("#colorInput").value;
+    if (!isHexColor(colour)) {
+      colour = "";
     }
-  })
-    .catch(error => console.error("Error: ", error));
+
+    fetch("/runner/edit_avatar", {
+      method: 'PUT',
+      body: JSON.stringify({
+        "filenames": filenames,
+        "colour": colour,
+      })
+    }).then(response => {
+      if (response.status == 200) {
+        document.querySelector("#success-message").innerHTML = "Avatar successfully saved.";
+      }
+    })
+      .catch(error => console.error("Error: ", error));
     
   });
 }

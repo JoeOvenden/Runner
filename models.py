@@ -10,6 +10,7 @@ class User(AbstractUser):
     use_avatar = models.BooleanField(default=True)
     avatar_mouth = models.CharField(max_length=100, default="open_wide.svg")
     avatar_eyes = models.CharField(max_length=100, default="smooth_shocked.svg")
+    avatar_colour = models.CharField(max_length=7, default="#FFFF00")
     bio = models.CharField(max_length=800, blank=True)
     phone_number = PhoneNumberField(blank=True)
     account_creation_date = models.DateField(auto_now_add=True)
@@ -24,7 +25,8 @@ class User(AbstractUser):
     def avatar(self):
         return {
             "mouth": self.avatar_mouth,
-            "eyes": self.avatar_eyes
+            "eyes": self.avatar_eyes,
+            "colour": self.avatar_colour
         }
 
 
