@@ -81,8 +81,22 @@ class Event(models.Model):
     
     def formatted_time(self):
         return self.date_time.strftime("%I:%M%p").lower()
-    
+
 
 class Event_Attendence(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="attendence")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="events_attending")
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="comments", null=True)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="comments")
+    text = models.CharField(max_length=400)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    like_count = models.IntegerField(default=0)
+
+
+class Like(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="likes")          # The user the likes the comment
+
