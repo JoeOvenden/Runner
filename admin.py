@@ -13,8 +13,19 @@ class EventAdmin(admin.ModelAdmin):
 class EventAttendenceAdmin(admin.ModelAdmin):
     list_display = ("event", "user")
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ("event", "user", "text")
+
+
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ("comment", "user")
+
+
+
 # Register your models here.
 admin.site.register(User, UserAdmin)
 admin.site.register(Follow, FollowAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Event_Attendence, EventAttendenceAdmin)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(Like, LikeAdmin)

@@ -1,4 +1,4 @@
-.event, #profile #profile-info #info #bio, #routeMap, #startMap, #endMap, #map {
+#comment, .event, #profile #profile-info #info #bio, #routeMap, #startMap, #endMap, #map {
   border: 2px solid white;
 }
 
@@ -36,6 +36,10 @@
 
 #top-container-no-bg #right-side, #top-container-no-bg #left-side, #top-container {
   background-color: rgb(218, 12, 129);
+}
+
+#comment {
+  background: linear-gradient(to bottom, rgb(233, 87, 147), rgb(218, 12, 129));
 }
 
 * {
@@ -436,6 +440,45 @@ form {
 }
 #image-container img {
   max-width: 100%;
+}
+
+#comment {
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+#rating-div {
+  min-width: 40px;
+  width: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+#rating-div div {
+  text-align: center;
+}
+#rating-div p {
+  max-height: 30px;
+  margin-bottom: 0px;
+}
+#rating-div .like-button:hover {
+  cursor: pointer;
+}
+
+#content-div {
+  margin-left: 15px;
+  width: 100%;
+}
+#content-div p {
+  vertical-align: top;
+}
+#content-div textarea {
+  vertical-align: top;
+  height: 50px;
+  min-height: 50px;
+  width: 40%;
 }
 
 /*# sourceMappingURL=styles.css.map */

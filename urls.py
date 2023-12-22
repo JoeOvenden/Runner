@@ -21,5 +21,6 @@ urlpatterns = [
     path("404", views.page_not_found, name="404"),
     path("events_search", views.events_search, name="events_search"),
     path("edit_avatar", views.edit_avatar, name="edit_avatar"),
-    path("<str:follow_type>", views.follow_page, name="follow_page"),
+    path("follow_page/<str:follow_type>", views.follow_page, name="follow_page"),
+    path("like_comment", views.like_comment, name="like_comment"),
 ]

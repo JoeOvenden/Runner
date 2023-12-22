@@ -399,19 +399,80 @@ def create_event(request):
     })
 
 
+def get_rating_value(comment, user):
+    # Returns 1 if the user has liked the comment and 0 otherwise
+    return int(comment.likes.filter(user=user).exists())
+    
+
+@login_required(login_url='runner:login')
+def like_comment(request):
+    if request.method == "POST":
+        comment_id = json.loads(request.body)
+
+        # Get post
+        comment = Comment.objects.get(id=comment_id)
+        post_like_change = 1                      # How much the post rating changes by
+
+        # If the comment is already liked by the user, then they are removing their like
+        try:    
+            like_object = comment.likes.get(user=request.user)  # Get the like object
+            like_object.delete()                                # Delete the like object
+            post_like_change = -1                               # Remember that the like count for the post is decreasing by 1
+
+        # If the comment has not yet been liked by the user
+        except Like.DoesNotExist:
+            like_object = Like(comment=comment, user=request.user)  # Create a new like object
+            like_object.save()                                      # Save it
+            post_like_change = 1                                    # Remember that the like count for the post is increasing by 1
+            
+        # Update comment rating
+        comment.like_count += post_like_change
+        comment.save()
+        return JsonResponse({'new_rating': comment.like_count})
+
+
+@login_required(login_url='runner:login')
 def event_page(request, event_id):
+
     try:
         event = Event.objects.get(id = event_id)
     except Event.DoesNotExist:
         return redirect('404')
-    users_attending = [attending.user for attending in event.attendence.all()]
-    number_of_attending = len(users_attending)
-    return render(request, "runner/event.html", {
-        "event": event,
-        "number_of_attending": number_of_attending,
-        "attending": users_attending,
-        "is_going": request.user in users_attending
-    })
+
+    def display(form=CommentForm()):
+        users_attending = [attending.user for attending in event.attendence.all()]
+        number_of_attending = len(users_attending)
+        comments = event.comments.all()
+
+        # Get dictionary where the keys are comments and the values are the booleans representing if the user has liked the comment
+        comment_user_likes_dict  = {comment: get_rating_value(comment, request.user) for comment in comments}
+
+
+        return render(request, "runner/event.html", {
+            "event": event,
+            "number_of_attending": number_of_attending,
+            "attending": users_attending,
+            "is_going": request.user in users_attending,
+            "form": form,
+            "comment_user_likes_dict": comment_user_likes_dict,
+        })
+        
+
+    if request.method == "GET":
+        return display()
+    
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+
+        if not form.is_valid():
+            return display(form)
+        
+        comment = Comment()
+        comment.user = request.user
+        comment.event = event
+        comment.text = form.cleaned_data["text"]
+        comment.save()
+        return display()
 
 
 def page_not_found(request):
@@ -512,6 +573,7 @@ def follow_page(request, follow_type):
     elif follow_type == "followers":
         follow_objects = request.user.followers.all()
         profiles = User.objects.filter(followings__in=follow_objects)
+
 
     profiles = filter_users_by_username(request, profiles)
     profiles, page = paginate(request, profiles, 3)

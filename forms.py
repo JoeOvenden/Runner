@@ -103,3 +103,17 @@ class FilterProfileEventsForm(forms.Form):
     when = forms.ChoiceField(choices=WHEN_OPTIONS, initial='upcoming', label="")
     status = forms.ChoiceField(choices=STATUS_OPTIONS, initial='attending', label="")
     sorting = forms.ChoiceField(choices=SORTING_OPTIONS, initial='date_time', label="")
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["text"]
+        widgets = {
+            "text": forms.Textarea(attrs={"cols": 40, "rows": 3})
+        }
+        labels = {
+            "text": "Post a comment"
+        }
+
+        

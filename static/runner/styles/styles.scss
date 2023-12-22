@@ -53,6 +53,10 @@ $font-color-grey: #c5c5c5;
     background-color: $theme-color2;
 }
 
+%gradient-bg {
+    background: linear-gradient(to bottom, $theme-color1, $theme-color2);
+}
+
 .padded {
     @extend %padded;
 }
@@ -567,5 +571,51 @@ form {
 
     img {
         max-width: 100%;
+    }
+}
+
+#comment {
+    @extend %bordered;
+    @extend %gradient-bg;
+    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+}
+
+#rating-div {
+    min-width: 40px;
+    width: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    div {
+        text-align: center;
+    }
+
+    p {
+        max-height: 30px;
+        margin-bottom: 0px;
+    }
+
+    .like-button:hover {
+        cursor: pointer;
+    }
+}
+
+#content-div {
+    margin-left: 15px;
+    width: 100%;
+
+    p {
+        vertical-align: top;
+    }
+
+    textarea {
+        vertical-align: top;
+        height: 50px;
+        min-height: 50px;
+        width: 40%;
     }
 }

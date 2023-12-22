@@ -69,6 +69,15 @@
                     <h5> = FINISH </h5>
                 </div>
             </div>
+            <hr>
+            <div>
+                <form href="{% url 'runner:event' event.id %}" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="submit" value="Post">
+                </form>
+            </div>
+            {% include 'runner/comments.html' with comment_user_likes_dict=comment_user_likes_dict %}
         </div>
     </div>
 
