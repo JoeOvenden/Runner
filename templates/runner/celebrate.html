@@ -1,9 +1,16 @@
 {% extends "runner/layout.html" %}
-
+cd
 {% block body %}
 
     <div id="top-container">
 
+        <div id="stats">
+            <h5>Stats</h5>
+        
+            {% for stat in stats %}
+                <p>{{ stat.label }}: {{ stat.value }}</p>
+            {% endfor %}
+        </div>
 
     </div>
     
