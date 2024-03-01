@@ -319,15 +319,27 @@ def get_rating_value(post, user):
         return 0
 
 
+def get_stats(events):
+    km_total = sum(event.distance for event in events)
+    number_of_runs = len(events)
+    return [
+        {"label": "Total Kilometers", "value": km_total},
+        {"label": "Longest Run", "value": max(event.distance for event in events)},
+        {"label": "Number of Runs", "value": number_of_runs},
+        {"label": "Average Distance", "value": round(km_total / number_of_runs, 1)},
+    ]
+
+
 def celebrate(request, username):
     """
     A page devoted to celebrating a user's runs and statistics.
     """
     # Get the user's previous events attended
     # Add up the stats!
-    events_attended = get_events_attended(request.user).filter(Q(lambda event: event.date_time <= datetime.datetime.now()))
-    print(events_attended)
-    return render(request, "runner/celebrate.html")
+    events_attended = get_events_attended(request.user, end_date=datetime.datetime.now())
+    return render(request, "runner/celebrate.html", {
+        "stats": get_stats(events_attended),
+    })
 
 
 def filter_users_by_username(request, profiles=User.objects.all()):
