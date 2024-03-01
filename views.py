@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
+from django.conf import settings
 from decimal import Decimal
 from geopy.distance import geodesic
 from django.db.models import Q
@@ -21,11 +22,11 @@ import os
 
 def list_files_in_directory(directory_path):
     file_list = []
-    
+
     # Iterate over all files in the directory
     for filename in os.listdir(directory_path):
         filepath = os.path.join(directory_path, filename)
-        
+
         # Check if it's a regular file
         if os.path.isfile(filepath):
             file_list.append(filepath)
