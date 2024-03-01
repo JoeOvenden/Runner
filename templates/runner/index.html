@@ -16,7 +16,7 @@
                 {% endif %}
                 <p>Want to join a running club but the times just don't quite work out? No worries! Join other people on their runs with this online flexible running community.</p>
                 <div id="image-container">
-                    <a href="{% url 'runner:events_search' %}"><img src="{% static 'runner/images/map.png' %}"></a>
+                    <a href="{% url 'runner:events_search' %}"><img src="{{ MEDIA_URL }}images/map.png"></a>
                 </div>
             </div>
 
