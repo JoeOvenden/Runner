@@ -21,23 +21,29 @@
             </div>
 
         </div>
-        {% if user.is_authenticated %}
         <div id="right-side" class="col-4 margin-left-right">
-                <div id="stats">
-                    {% if events|length == 0%}
-                        <p>You are not attending any events in the next 7 days. Now's the time to get back to it!</p>
-                    {% else %}
-                        <p>You are attending {{ events|length }} event{{ events|length|pluralize:"s" }} in the next week.</p>
-                        <ul>
-                            {% for event in events %}
-                                <li><a href="{% url 'runner:event' event.id %}">{{ event }}</a></li>
-                            {% endfor %}
-                        </ul>
+            {% if user.is_authenticated %}
+                    <div id="stats">
+                        {% if events|length == 0%}
+                            <p>You are not attending any events in the next 7 days. Now's the time to get back to it!</p>
+                        {% else %}
+                            <p>You are attending {{ events|length }} event{{ events|length|pluralize:"s" }} in the next week.</p>
+                            <ul>
+                                {% for event in events %}
+                                    <li><a href="{% url 'runner:event' event.id %}">{{ event }}</a></li>
+                                {% endfor %}
+                            </ul>
 
-                    {% endif %}
+                        {% endif %}
+                    </div>
+            {% else %}
+                <div>
+                    <h5>To test the site, please use the following account:</h5>
+                    <p>Username: tester</p>
+                    <p>Password: 1234</p>
                 </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
     
 {% endblock %}
